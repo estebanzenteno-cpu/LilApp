@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>LitApp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap"/>
+    <h:outputStylesheet name="css/styles.css"/>
+</h:head>
+<h:body styleClass="lit-body">
+    <p:growl id="msgs" showDetail="false" life="5000" escape="true"/>
+
+    <header class="lit-header">
+        <h:link outcome="/index" styleClass="lit-logo">LitApp<sup>&#176;</sup></h:link>
+        <h:outputText id="titulo" value="#{navegacionUI.titulo}" styleClass="lit-titulo"/>
+    </header>
+
+    <main class="lit-main">
+        <ui:insert name="contenido"/>
+    </main>
+
+    <h:form id="frmRegresar">
+        <p:commandLink action="#{navegacionUI.regresar}" process="@this"
+                       update=":contenido :titulo :frmRegresar" styleClass="lit-regresar" title="Regresar"
+                       rendered="#{not navegacionUI.enMenu}">
+            <ui:include src="/WEB-INF/templates/flecha.xhtml"/>
+        </p:commandLink>
+        <h:outputLink value="#" styleClass="lit-regresar" title="Regresar" onclick="history.back(); return false;"
+                      rendered="#{navegacionUI.enMenu}">
+            <ui:include src="/WEB-INF/templates/flecha.xhtml"/>
+        </h:outputLink>
+    </h:form>
+</h:body>
+</html>

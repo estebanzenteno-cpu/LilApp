@@ -1,0 +1,61 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:panelGroup id="pnlModificar" layout="block">
+
+        <h:form id="frmLista" rendered="#{empty clienteUI.clienteSeleccionado}" styleClass="lit-lista">
+            <p class="lit-instruccion">Seleccione el cliente que desea modificar</p>
+            <p:dataTable value="#{clienteUI.clientes}" var="c" paginator="true" rows="8"
+                         paginatorAlwaysVisible="false" emptyMessage="No hay clientes registrados"
+                         styleClass="lit-tabla">
+                <p:column headerText="Nombre">#{c.nombres} #{c.apellidoPaterno} #{c.apellidoMaterno}</p:column>
+                <p:column headerText="Teléfono">#{c.telefono}</p:column>
+                <p:column headerText="Correo">#{c.correo}</p:column>
+                <p:column style="width:4rem; text-align:center">
+                    <p:commandButton icon="pi pi-pen-to-square" title="Modificar"
+                                     action="#{clienteUI.seleccionarCliente(c)}"
+                                     process="@this" update=":pnlModificar"
+                                     styleClass="lit-boton-icono"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <h:form id="frmEditar" rendered="#{not empty clienteUI.clienteSeleccionado}" styleClass="lit-form"
+                enctype="multipart/form-data">
+            <p:inputText id="nombre" value="#{clienteUI.nombreCompletoSeleccionado}"
+                         placeholder="Nombre del cliente" maxlength="300" styleClass="lit-input lit-ancho"/>
+
+            <div class="lit-fila">
+                <p:inputText id="telefono" value="#{clienteUI.clienteSeleccionado.telefono}"
+                             placeholder="Teléfono" maxlength="20" styleClass="lit-input"/>
+                <p:inputText id="correo" type="email" value="#{clienteUI.clienteSeleccionado.correo}"
+                             placeholder="Correo electrónico" maxlength="150" styleClass="lit-input"/>
+            </div>
+
+            <h:panelGroup id="pnlConstancia" layout="block" styleClass="lit-constancia">
+                <p:fileUpload listener="#{clienteUI.subirNuevaConstanciaFiscal}"
+                              mode="simple" skinSimple="true" auto="true"
+                              label="#{empty clienteUI.nombreNuevaConstancia ? 'Constancia Fiscal (PDF)' : clienteUI.nombreNuevaConstancia}"
+                              chooseIcon="pi pi-file-arrow-up"
+                              accept=".pdf,application/pdf" allowTypes="/(\.|\/)(pdf)$/" sizeLimit="5242880"
+                              invalidFileMessage="El campo de constancia fiscal solo debe de permitir archivos en PDF"
+                              invalidSizeMessage="La constancia fiscal no debe pesar mas de 5 MB"
+                              process="@this" update="pnlConstancia :msgs"/>
+                <h:outputText value="Si no adjunta un PDF se conserva la constancia actual"
+                              rendered="#{empty clienteUI.nombreNuevaConstancia}" styleClass="lit-nota"/>
+            </h:panelGroup>
+
+            <div class="lit-acciones">
+                <p:commandButton value="Guardar" action="#{clienteUI.actualizarCliente}"
+                                 process="@this nombre telefono correo" update=":pnlModificar :msgs"
+                                 styleClass="lit-boton"/>
+                <p:commandButton value="Limpiar formulario" action="#{clienteUI.limpiarModificacion}"
+                                 process="@this" update="@form" styleClass="lit-boton lit-boton-chico">
+                    <p:resetInput target="@form"/>
+                </p:commandButton>
+            </div>
+        </h:form>
+    </h:panelGroup>
+</ui:composition>
