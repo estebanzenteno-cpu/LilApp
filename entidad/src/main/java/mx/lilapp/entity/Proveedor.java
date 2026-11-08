@@ -24,7 +24,6 @@ public class Proveedor implements Serializable {
     @Column(name = "direccion", length = 255)
     private String direccion;
 
-    /** Tabla intermedia "ofrece": tipos de producto que ofrece este proveedor. */
     @ManyToMany
     @JoinTable(name = "ofrece",
             joinColumns = @JoinColumn(name = "idProveedor"),

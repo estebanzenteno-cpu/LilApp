@@ -5,9 +5,9 @@ import mx.lilapp.persistence.persistence.AbstractDAO;
 
 public class TipoProductoDAO extends AbstractDAO<TipoProducto> {
 
+    /** Indica que este DAO trabaja con la entidad TipoProducto. */
     public TipoProductoDAO() {
         super(TipoProducto.class);
     }
 
-    // Consultas propias de TipoProducto aqui
 }

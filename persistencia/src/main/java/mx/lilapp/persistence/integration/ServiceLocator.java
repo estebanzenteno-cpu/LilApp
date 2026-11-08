@@ -2,9 +2,6 @@ package mx.lilapp.persistence.integration;
 
 import mx.lilapp.persistence.dao.*;
 
-/**
- * Punto unico de acceso a los DAO (una instancia por DAO).
- */
 public final class ServiceLocator {
 
     private static ClienteDAO clienteDAO;
@@ -13,9 +10,11 @@ public final class ServiceLocator {
     private static RolDAO rolDAO;
     private static UsuarioDAO usuarioDAO;
 
+    /** Evita que se creen instancias de esta clase. */
     private ServiceLocator() {
     }
 
+    /** Devuelve la instancia unica de ClienteDAO. */
     public static synchronized ClienteDAO getInstanceClienteDAO() {
         if (clienteDAO == null) {
             clienteDAO = new ClienteDAO();
@@ -23,6 +22,7 @@ public final class ServiceLocator {
         return clienteDAO;
     }
 
+    /** Devuelve la instancia unica de ProveedorDAO. */
     public static synchronized ProveedorDAO getInstanceProveedorDAO() {
         if (proveedorDAO == null) {
             proveedorDAO = new ProveedorDAO();
@@ -30,6 +30,7 @@ public final class ServiceLocator {
         return proveedorDAO;
     }
 
+    /** Devuelve la instancia unica de TipoProductoDAO. */
     public static synchronized TipoProductoDAO getInstanceTipoProductoDAO() {
         if (tipoProductoDAO == null) {
             tipoProductoDAO = new TipoProductoDAO();
@@ -37,6 +38,7 @@ public final class ServiceLocator {
         return tipoProductoDAO;
     }
 
+    /** Devuelve la instancia unica de RolDAO. */
     public static synchronized RolDAO getInstanceRolDAO() {
         if (rolDAO == null) {
             rolDAO = new RolDAO();
@@ -44,6 +46,7 @@ public final class ServiceLocator {
         return rolDAO;
     }
 
+    /** Devuelve la instancia unica de UsuarioDAO. */
     public static synchronized UsuarioDAO getInstanceUsuarioDAO() {
         if (usuarioDAO == null) {
             usuarioDAO = new UsuarioDAO();

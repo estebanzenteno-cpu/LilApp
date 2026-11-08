@@ -2,11 +2,9 @@ import jakarta.persistence.EntityManager;
 import mx.lilapp.entity.*;
 import mx.lilapp.persistence.persistence.HibernateUtil;
 
-/**
- * Ejecuta este main para comprobar la conexion con Lil_App y el mapeo de las entidades.
- */
 public class TestConexion {
 
+    /** Prueba la conexion con la base de datos y el mapeo de las entidades. */
     public static void main(String[] args) {
         try {
             EntityManager em = HibernateUtil.getEntityManager();

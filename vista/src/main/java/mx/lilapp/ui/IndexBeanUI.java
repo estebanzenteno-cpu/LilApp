@@ -7,10 +7,6 @@ import mx.lilapp.helper.IndexHelper;
 
 import java.io.Serializable;
 
-/**
- * BeanUI: respalda una pagina .xhtml (lo que la vista lee y las acciones de botones).
- * Delega el trabajo al Helper correspondiente. Usa este como plantilla para los demas.
- */
 @Named("indexUI")
 @ViewScoped
 public class IndexBeanUI implements Serializable {
@@ -19,6 +15,7 @@ public class IndexBeanUI implements Serializable {
     private String mensaje;
 
     @PostConstruct
+    /** Inicializa el helper y el mensaje de bienvenida. */
     public void init() {
         helper = new IndexHelper();
         mensaje = helper.mensajeBienvenida();

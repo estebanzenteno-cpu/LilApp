@@ -4,10 +4,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-/**
- * Crea una sola EntityManagerFactory para toda la aplicacion y
- * entrega un EntityManager por hilo (una peticion web = un hilo).
- */
 public final class HibernateUtil {
 
     private static final String PERSISTENCE_UNIT = "persistencePU";
@@ -15,9 +11,11 @@ public final class HibernateUtil {
     private static final EntityManagerFactory EMF = buildEntityManagerFactory();
     private static final ThreadLocal<EntityManager> EM_THREAD = new ThreadLocal<>();
 
+    /** Evita que se creen instancias de esta clase. */
     private HibernateUtil() {
     }
 
+    /** Crea la EntityManagerFactory de la unidad de persistencia. */
     private static EntityManagerFactory buildEntityManagerFactory() {
         try {
             return Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
@@ -27,6 +25,7 @@ public final class HibernateUtil {
         }
     }
 
+    /** Devuelve el EntityManager del hilo actual, creandolo si no existe. */
     public static EntityManager getEntityManager() {
         EntityManager em = EM_THREAD.get();
         if (em == null || !em.isOpen()) {
@@ -36,6 +35,7 @@ public final class HibernateUtil {
         return em;
     }
 
+    /** Cierra el EntityManager del hilo actual. */
     public static void closeEntityManager() {
         EntityManager em = EM_THREAD.get();
         if (em != null) {
@@ -46,6 +46,7 @@ public final class HibernateUtil {
         }
     }
 
+    /** Inicia una transaccion si no hay una activa. */
     public static void beginTransaction() {
         EntityManager em = getEntityManager();
         if (!em.getTransaction().isActive()) {
@@ -53,6 +54,7 @@ public final class HibernateUtil {
         }
     }
 
+    /** Confirma la transaccion activa. */
     public static void commit() {
         EntityManager em = getEntityManager();
         if (em.getTransaction().isActive()) {
@@ -60,6 +62,7 @@ public final class HibernateUtil {
         }
     }
 
+    /** Revierte la transaccion activa. */
     public static void rollback() {
         EntityManager em = getEntityManager();
         if (em.getTransaction().isActive()) {
@@ -67,6 +70,7 @@ public final class HibernateUtil {
         }
     }
 
+    /** Cierra el EntityManager y la EntityManagerFactory. */
     public static void shutdown() {
         closeEntityManager();
         if (EMF.isOpen()) {

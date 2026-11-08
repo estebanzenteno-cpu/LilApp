@@ -18,7 +18,6 @@ public class TipoProducto implements Serializable {
     @Column(name = "nombreProducto", nullable = false, unique = true, length = 100)
     private String nombreProducto;
 
-    /** Lado inverso de la tabla "ofrece". */
     @ManyToMany(mappedBy = "tiposProducto")
     private Set<Proveedor> proveedores = new HashSet<>();
 
