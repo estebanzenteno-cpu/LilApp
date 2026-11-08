@@ -13,6 +13,7 @@ public class NavegacionBeanUI implements Serializable {
     public static final String MENU = "menu";
     public static final String REGISTRAR = "registrar";
     public static final String MODIFICAR = "modificar";
+    public static final String REGISTRAR_PROVEEDOR = "registrar-proveedor";
 
     @Inject
     private ClienteBeanUI clienteUI;
@@ -42,6 +43,8 @@ public class NavegacionBeanUI implements Serializable {
                 return "REGISTRAR CLIENTE";
             case MODIFICAR:
                 return "MODIFICAR CLIENTE";
+            case REGISTRAR_PROVEEDOR:
+                return "REGISTRAR PROVEEDOR";
             default:
                 return "";
         }

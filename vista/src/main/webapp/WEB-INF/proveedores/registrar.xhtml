@@ -1,0 +1,117 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="frmProveedor" styleClass="lit-form">
+
+        <h:panelGroup rendered="#{not proveedorUI.registroExitoso}"
+                      layout="block">
+
+            <p:inputText id="nombre"
+                         value="#{proveedorUI.proveedor.nombreProveedor}"
+                         placeholder="Nombre del proveedor*"
+                         maxlength="50"
+                         required="true"
+                         requiredMessage="Escribe el nombre del proveedor."
+                         styleClass="lit-input lit-ancho"/>
+
+            <div class="lit-fila">
+                <p:inputText id="telefono"
+                             value="#{proveedorUI.proveedor.telefono}"
+                             placeholder="Teléfono*"
+                             maxlength="10"
+                             required="true"
+                             requiredMessage="Escribe el teléfono."
+                             styleClass="lit-input"/>
+
+                <p:inputText id="direccion"
+                             value="#{proveedorUI.proveedor.direccion}"
+                             placeholder="Dirección*"
+                             maxlength="100"
+                             required="true"
+                             requiredMessage="Escribe la dirección."
+                             styleClass="lit-input"/>
+            </div>
+
+            <div class="lit-tipo-producto">
+                <p:outputLabel for="productos" value="Tipos de producto*"/>
+
+                <p:selectCheckboxMenu id="productos"
+                                      value="#{proveedorUI.productosSeleccionados}"
+                                      label="Selecciona productos"
+                                      multiple="true"
+                                      filter="true"
+                                      filterMatchMode="contains"
+                                      required="true"
+                                      requiredMessage="Elija al menos un tipo de producto.">
+                    <f:selectItems value="#{proveedorUI.opcionesProducto}"/>
+                </p:selectCheckboxMenu>
+            </div>
+
+            <div class="lit-acciones">
+                <p:commandButton value="Registrar"
+                                 action="#{proveedorUI.registrar}"
+                                 process="@form"
+                                 update="@form :msgs"
+                                 styleClass="lit-boton">
+                    <p:confirm header="Confirmar registro"
+                               message="¿Desea registrar al proveedor?"
+                               icon="pi pi-question-circle"/>
+                </p:commandButton>
+
+                <p:commandButton value="Limpiar formulario"
+                                 action="#{proveedorUI.limpiar}"
+                                 process="@this"
+                                 update="@form"
+                                 styleClass="lit-boton lit-boton-chico">
+                    <p:resetInput target="@form"/>
+                </p:commandButton>
+            </div>
+
+        </h:panelGroup>
+
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="lit-dialogo-confirmacion">
+            <p:commandButton value="No"
+                             type="button"
+                             styleClass="ui-confirmdialog-no lit-boton"/>
+
+            <p:commandButton value="Sí"
+                             type="button"
+                             styleClass="ui-confirmdialog-yes lit-boton"/>
+        </p:confirmDialog>
+
+        <h:panelGroup rendered="#{proveedorUI.registroExitoso}"
+                      layout="block"
+                      styleClass="lit-confirmacion">
+
+            <i class="pi pi-check-circle lit-confirmacion-icono"></i>
+            <h2 class="lit-confirmacion-titulo">Proveedor registrado con éxito</h2>
+
+            <div class="lit-resumen">
+                <strong>Nombre:</strong>
+                <h:outputText value="#{proveedorUI.proveedor.nombreProveedor}"/>
+                <br/>
+
+                <strong>Teléfono:</strong>
+                <h:outputText value="#{proveedorUI.proveedor.telefono}"/>
+                <br/>
+
+                <strong>Dirección:</strong>
+                <h:outputText value="#{proveedorUI.proveedor.direccion}"/>
+                <br/>
+
+                <strong>Tipos de producto:</strong>
+                <h:outputText value="#{proveedorUI.productosRegistrados}"/>
+            </div>
+
+            <p:commandButton value="Registrar otro proveedor"
+                             action="#{proveedorUI.nuevoRegistro}"
+                             process="@this"
+                             update="@form :msgs"
+                             styleClass="lit-boton"/>
+        </h:panelGroup>
+
+    </h:form>
+</ui:composition>

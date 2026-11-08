@@ -420,3 +420,117 @@ body .ui-growl .ui-growl-item-container .ui-growl-icon-close .ui-icon {
         bottom: 1rem;
     }
 }
+
+.lit-tipo-producto {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: min(100%, 320px);
+    margin: 12px auto;
+    padding: 12px 14px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background: #a8c5a2;
+    color: #4b5356;
+    box-shadow: 0 3px 5px rgb(0 0 0 / 22%);
+}
+
+.lit-tipo-producto .ui-outputlabel {
+    color: #4b5356;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.lit-tipo-producto .ui-selectcheckboxmenu {
+    width: 100%;
+    border: 0;
+    border-radius: 8px;
+    background: #a8c5a2;
+}
+
+.lit-confirmacion {
+    width: min(92%, 520px);
+    margin: 24px auto;
+    text-align: center;
+}
+
+.lit-confirmacion i.lit-confirmacion-icono {
+    display: block;
+    font-size: 110px !important;
+    line-height: 1;
+}
+
+.lit-confirmacion-titulo {
+    color: #4b9b42;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 8px 0 18px;
+}
+
+.lit-resumen {
+    padding: 16px 18px;
+    border-radius: 12px;
+    background: #a8c5a2;
+    color: #50575a;
+    text-align: left;
+    line-height: 1.45;
+    box-shadow: 0 3px 6px rgb(0 0 0 / 24%);
+}
+
+.lit-resumen strong {
+    font-weight: 700;
+}
+
+/* Diálogo de confirmación */
+.lit-dialogo-confirmacion.ui-dialog {
+    width: min(92vw, 360px) !important;
+    border: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 16px rgb(0 0 0 / 30%);
+}
+
+.lit-dialogo-confirmacion .ui-dialog-titlebar {
+    min-height: 12px;
+    padding: 6px 10px;
+    border: 0;
+    background: #50575a;
+}
+
+.lit-dialogo-confirmacion .ui-dialog-title {
+    display: none;
+}
+
+.lit-dialogo-confirmacion .ui-dialog-titlebar-close {
+    display: none;
+}
+
+.lit-dialogo-confirmacion .ui-dialog-content {
+    padding: 16px;
+    background: #a8c5a2;
+    color: #50575a;
+    text-align: center;
+    font-size: 15px;
+}
+
+.lit-dialogo-confirmacion .ui-dialog-footer {
+    display: flex;
+    justify-content: space-around;
+    gap: 12px;
+    padding: 8px 16px 16px;
+    border: 0;
+    background: #a8c5a2;
+}
+
+.lit-dialogo-confirmacion .ui-confirmdialog-no,
+.lit-dialogo-confirmacion .ui-confirmdialog-yes {
+    min-width: 90px;
+    border: 0;
+    border-radius: 18px;
+    background: #50575a;
+    color: #a8c5a2;
+    font-weight: 700;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 25%);
+}
+
