@@ -33,4 +33,12 @@ public class FacadeProveedor {
     public List<Proveedor> listar() {
         return delegateProveedor.listar();
     }
+
+    public List<Proveedor> listarOrdenados() {
+        return delegateProveedor.listarOrdenados();
+    }
+
+    public List<Proveedor> buscarPorNombre(String nombre) {
+        return delegateProveedor.buscarPorNombre(nombre);
+    }
 }

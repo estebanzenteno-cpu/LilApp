@@ -31,4 +31,12 @@ public class DelegateProveedor {
     public List<Proveedor> listar() {
         return ServiceLocator.getInstanceProveedorDAO().findAll();
     }
+
+    public List<Proveedor> listarOrdenados() {
+        return ServiceLocator.getInstanceProveedorDAO().listarOrdenados();
+    }
+
+    public List<Proveedor> buscarPorNombre(String nombre) {
+        return ServiceLocator.getInstanceProveedorDAO().buscarPorNombre(nombre);
+    }
 }

@@ -640,3 +640,225 @@ body .ui-growl .ui-growl-item-container .ui-growl-icon-close .ui-icon {
     box-shadow: 0 2px 4px rgb(0 0 0 / 25%);
 }
 
+.lit-consulta {
+    width: min(92%, 640px);
+    margin: 32px auto;
+}
+
+.lit-busqueda-proveedor {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: #a8c5a2;
+    box-shadow: 0 3px 6px rgb(0 0 0 / 22%);
+}
+
+.lit-busqueda-proveedor .lit-input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.lit-tabla-proveedores {
+    width: 100%;
+    margin: 16px auto;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: #a8c5a2;
+    box-shadow: 0 3px 6px rgb(0 0 0 / 22%);
+}
+
+.lit-tabla-proveedores .ui-datatable-table {
+    width: 100%;
+}
+
+.lit-tabla-proveedores .ui-datatable-data > tr > td {
+    padding: 8px 4px;
+    border: 0;
+    border-bottom: 1px solid rgb(80 87 90 / 35%);
+    background: transparent;
+}
+
+.lit-tabla-proveedores .ui-datatable-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.lit-tabla-proveedores .ui-datatable-data > tr > td:last-child {
+    width: 5.5rem;
+    padding-left: 8px;
+    padding-right: 8px;
+    text-align: right;
+    overflow: visible;
+}
+
+.lit-tabla-proveedores .lit-boton-ver {
+    float: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 64px;
+    min-width: 64px;
+    padding: 4px 8px;
+    white-space: nowrap;
+}
+
+.lit-tabla-proveedores thead {
+    display: none;
+}
+
+.lit-tabla-proveedores .ui-datatable-data > tr > td {
+    background: #a8c5a2 !important;
+    color: #50575a;
+    padding: 9px 6px;
+    border: 0;
+    border-bottom: 1px solid rgb(80 87 90 / 30%);
+}
+
+.lit-tabla-proveedores .ui-datatable-tablewrapper {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.lit-busqueda-proveedor {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.lit-busqueda-proveedor .lit-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 40px;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.lit-busqueda-proveedor .ui-button {
+    flex: 0 0 auto;
+    height: 40px;
+    margin: 0;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 600px) {
+    .lit-busqueda-proveedor {
+        flex-wrap: wrap;
+    }
+
+    .lit-busqueda-proveedor .lit-input {
+        flex: 1 1 calc(100% - 32px);
+    }
+}
+
+.lit-tabla-proveedores {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 16px auto;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: #a8c5a2;
+    box-shadow: 0 3px 6px rgb(0 0 0 / 22%);
+    overflow: hidden;
+}
+
+.lit-fila-proveedor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 54px;
+    padding: 8px 4px;
+    border-bottom: 1px solid rgb(80 87 90 / 30%);
+}
+
+.lit-fila-proveedor:last-child {
+    border-bottom: 0;
+}
+
+.lit-nombre-proveedor {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: #50575a;
+}
+
+.lit-fila-proveedor .lit-boton-ver {
+    flex: 0 0 64px;
+    width: 64px;
+    min-width: 64px;
+    margin: 0;
+    float: none;
+    white-space: nowrap;
+}
+
+.lit-busqueda-proveedor {
+    align-items: center !important;
+}
+
+.lit-busqueda-proveedor .ui-button.lit-boton {
+    align-self: center !important;
+    height: 36px;
+    margin: 0 !important;
+    position: static !important;
+    transform: none !important;
+}
+
+.lit-mensaje-vacio {
+    width: min(92%, 640px);
+    box-sizing: border-box;
+    margin: 12px auto;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: #a8c5a2;
+    color: #50575a;
+    box-shadow: 0 3px 6px rgb(0 0 0 / 22%);
+}
+
+.lit-busqueda-proveedor,
+.lit-tabla-proveedores,
+.lit-mensaje-vacio {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.lit-fila-proveedor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.lit-nombre-proveedor {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.lit-fila-proveedor {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.lit-fila-proveedor .ui-button.lit-boton-ver {
+    align-self: center !important;
+    margin: 0 !important;
+    float: none !important;
+    transform: none !important;
+}
+
+.lit-fila-proveedor .lit-nombre-proveedor {
+    display: flex;
+    align-items: center;
+    line-height: 1.2;
+}

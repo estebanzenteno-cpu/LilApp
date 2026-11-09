@@ -92,7 +92,10 @@
                         <span class="tarjeta-texto">REGISTRAR PROVEEDOR</span>
                     </p:commandLink>
 
-                    <a class="tarjeta" href="#" title="Disponible próximamente" onclick="return false;">
+                    <p:commandLink action="#{navegacionUI.ir('consulta-proveedor')}"
+                                   process="@this"
+                                   update=":contenido :titulo :frmRegresar"
+                                   styleClass="tarjeta">
                         <span class="tarjeta-icono">
                             <svg viewBox="0 0 100 80" aria-hidden="true">
                                 <circle cx="40" cy="26" r="14"/>
@@ -102,14 +105,18 @@
                                 <rect x="60" y="38" width="24" height="31" rx="3" class="contorno"/>
                                 <rect x="66" y="35" width="12" height="6" rx="1.5" class="contorno"/>
                                 <g class="hueco">
-                                    <rect x="64" y="46" width="3" height="3"/><rect x="69" y="46" width="11" height="3"/>
-                                    <rect x="64" y="52" width="3" height="3"/><rect x="69" y="52" width="11" height="3"/>
-                                    <rect x="64" y="58" width="3" height="3"/><rect x="69" y="58" width="11" height="3"/>
-                                </g>
+                                    <rect x="64" y="46" width="3" height="3"/>
+                                    <rect x="69" y="46" width="11" height="3"/>
+                                    <rect x="64" y="52" width="3" height="3"/>
+                                    <rect x="69" y="52" width="11" height="3"/>
+                                    <rect x="64" y="58" width="3" height="3"/>
+                                    <rect x="69" y="58" width="11" height="3"/>
+                                 </g>
                             </svg>
                         </span>
+
                         <span class="tarjeta-texto">CONSULTAR PROVEEDOR</span>
-                    </a>
+                    </p:commandLink>
 
                     <a class="tarjeta" href="#" title="Disponible próximamente" onclick="return false;">
                         <span class="tarjeta-icono">
@@ -153,6 +160,11 @@
 
             <h:panelGroup layout="block" rendered="#{navegacionUI.pagina eq 'registrar-proveedor'}">
                 <ui:include src="/WEB-INF/proveedores/registrar.xhtml"/>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block"
+                          rendered="#{navegacionUI.pagina eq 'consulta-proveedor'}">
+                <ui:include src="/WEB-INF/proveedores/consulta.xhtml"/>
             </h:panelGroup>
         </h:panelGroup>
     </ui:define>

@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="frmConsultaProveedor" styleClass="lit-consulta">
+
+        <div class="lit-busqueda-proveedor">
+            <i class="pi pi-search" aria-hidden="true"></i>
+
+            <p:inputText id="busqueda"
+                         value="#{proveedorUI.busquedaProveedor}"
+                         placeholder="Buscar proveedores disponibles"
+                         styleClass="lit-input"/>
+
+            <p:commandButton value="Buscar"
+                             action="#{proveedorUI.buscarProveedores}"
+                             process="@this busqueda"
+                             update=":contenido :msgs"
+                             styleClass="lit-boton"/>
+
+            <p:commandButton value="Limpiar"
+                             action="#{proveedorUI.limpiarBusqueda}"
+                             process="@this"
+                             update=":contenido :msgs"
+                             styleClass="lit-boton lit-boton-limpiar"/>
+        </div>
+
+        <h:panelGroup id="resultados" layout="block">
+
+            <h:panelGroup rendered="#{not empty proveedorUI.proveedores}"
+                          layout="block"
+                          styleClass="lit-tabla-proveedores">
+
+                <ui:repeat value="#{proveedorUI.proveedores}" var="p">
+                    <div class="lit-fila-proveedor">
+                        <h:outputText value="#{p.nombreProveedor}"
+                                      styleClass="lit-nombre-proveedor"/>
+
+                        <p:commandButton value="VER"
+                                         action="#{proveedorUI.verProveedor(p)}"
+                                         process="@this"
+                                         update=":frmConsultaProveedor:dlgProveedorContenido"
+                                         oncomplete="PF('dlgProveedor').show()"
+                                         styleClass="lit-boton lit-boton-ver"/>
+                    </div>
+                </ui:repeat>
+
+            </h:panelGroup>
+
+            <h:panelGroup layout="block"
+                          styleClass="lit-mensaje-vacio"
+                          rendered="#{empty proveedorUI.proveedores}">
+                <h:outputText value="#{empty proveedorUI.busquedaProveedor
+                              ? 'No hay proveedores registrados.'
+                              : 'No se encontraron proveedores.'}"/>
+            </h:panelGroup>
+
+        </h:panelGroup>
+
+        <p:dialog id="dlgProveedor"
+                  widgetVar="dlgProveedor"
+                  header="Proveedor"
+                  modal="true"
+                  closable="true"
+                  resizable="false">
+
+            <h:panelGroup id="dlgProveedorContenido" layout="block">
+
+                <h:panelGroup rendered="#{not empty proveedorUI.proveedorConsulta}">
+
+                    <p>
+                        <strong>Nombre:</strong>
+                        <h:outputText value="#{proveedorUI.proveedorConsulta.nombreProveedor}"/>
+                    </p>
+
+                    <p>
+                        <strong>Teléfono:</strong>
+                        <h:outputText value="#{proveedorUI.proveedorConsulta.telefono}"/>
+                    </p>
+
+                    <p>
+                        <strong>Dirección:</strong>
+                        <h:outputText value="#{proveedorUI.proveedorConsulta.direccion}"/>
+                    </p>
+
+                    <p><strong>Tipos de producto:</strong></p>
+
+                    <ui:repeat value="#{proveedorUI.proveedorConsulta.tiposProducto}"
+                               var="tipo">
+                        <h:outputText value="#{tipo.nombreProducto}"/>
+                        <br/>
+                    </ui:repeat>
+
+                </h:panelGroup>
+
+            </h:panelGroup>
+        </p:dialog>
+
+    </h:form>
+</ui:composition>

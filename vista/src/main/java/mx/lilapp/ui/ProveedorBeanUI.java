@@ -23,6 +23,9 @@ public class ProveedorBeanUI implements Serializable{
     private List<SelectItem> opcionesProducto;
     private boolean registroExitoso;
     private String productosRegistrados;
+    private String busquedaProveedor;
+    private List<Proveedor> proveedores;
+    private Proveedor proveedorConsulta;
 
     @PostConstruct
     public void init() {
@@ -111,5 +114,37 @@ public class ProveedorBeanUI implements Serializable{
                     .collect(Collectors.toList());
         }
         return opcionesProducto;
+    }
+
+    public List<Proveedor> getProveedores() {
+        if (proveedores == null) {
+            proveedores = helper.listarProveedoresOrdenados();
+        }
+        return proveedores;
+    }
+
+    public String getBusquedaProveedor() {
+        return busquedaProveedor;
+    }
+
+    public void setBusquedaProveedor(String busquedaProveedor) {
+        this.busquedaProveedor = busquedaProveedor;
+    }
+
+    public void buscarProveedores() {
+        proveedores = helper.buscarProveedoresPorNombre(busquedaProveedor);
+    }
+
+    public void limpiarBusqueda() {
+        busquedaProveedor = null;
+        proveedores = helper.listarProveedoresOrdenados();
+    }
+
+    public void verProveedor(Proveedor proveedor) {
+        this.proveedorConsulta = proveedor;
+    }
+
+    public Proveedor getProveedorConsulta() {
+        return proveedorConsulta;
     }
 }

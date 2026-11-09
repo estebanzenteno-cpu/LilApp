@@ -90,4 +90,20 @@ public class ProveedorHelper implements Serializable {
     private boolean vacio(String valor){
         return valor == null || valor.trim().isEmpty();
     }
+
+    public List<Proveedor> listarProveedoresOrdenados() {
+        return ServiceFacadeLocator
+                .getInstanceFacadeProveedor()
+                .listarOrdenados();
+    }
+
+    public List<Proveedor> buscarProveedoresPorNombre(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            return listarProveedoresOrdenados();
+        }
+
+        return ServiceFacadeLocator
+                .getInstanceFacadeProveedor()
+                .buscarPorNombre(nombre.trim());
+    }
 }
