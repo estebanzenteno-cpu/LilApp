@@ -5,11 +5,12 @@
 
     <h:form id="frmRegistro" styleClass="lit-form" enctype="multipart/form-data">
         <p:inputText id="nombre" value="#{clienteUI.nombreCompleto}" placeholder="Nombre del cliente"
-                     maxlength="300" styleClass="lit-input lit-ancho"/>
+                     maxlength="50" styleClass="lit-input lit-ancho"/>
 
         <div class="lit-fila">
             <p:inputText id="telefono" value="#{clienteUI.cliente.telefono}" placeholder="Teléfono"
-                         maxlength="20" styleClass="lit-input"/>
+                         maxlength="10" styleClass="lit-input"/>
+            <p:keyFilter for="telefono" mask="pint"/>
             <p:inputText id="correo" type="email" value="#{clienteUI.cliente.correo}"
                          placeholder="Correo electrónico" maxlength="150" styleClass="lit-input"/>
         </div>
@@ -21,7 +22,7 @@
                           chooseIcon="pi pi-file-arrow-up"
                           accept=".pdf,application/pdf" allowTypes="/(\.|\/)(pdf)$/" sizeLimit="5242880"
                           invalidFileMessage="El campo de constancia fiscal solo debe de permitir archivos en PDF"
-                          invalidSizeMessage="La constancia fiscal no debe pesar mas de 5 MB"
+                          invalidSizeMessage="La constancia fiscal no debe pesar más de 5 MB"
                           process="@this" update="pnlConstancia :msgs"/>
         </h:panelGroup>
 

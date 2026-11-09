@@ -1,6 +1,7 @@
 package mx.lilapp.integration;
 
 import mx.lilapp.facade.*;
+import mx.lilapp.persistence.persistence.HibernateUtil;
 
 public final class ServiceFacadeLocator {
 
@@ -52,5 +53,10 @@ public final class ServiceFacadeLocator {
             facadeUsuario = new FacadeUsuario();
         }
         return facadeUsuario;
+    }
+
+    /** Libera la conexion a la base de datos usada en la peticion actual. */
+    public static void liberarRecursos() {
+        HibernateUtil.closeEntityManager();
     }
 }

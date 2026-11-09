@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,14 +19,17 @@ public class ClienteHelper implements Serializable {
 
     public static final String MSG_CAMPOS_OBLIGATORIOS = "Favor de llenar todos los campos";
     public static final String MSG_SOLO_PDF = "El campo de constancia fiscal solo debe de permitir archivos en PDF";
+    public static final String MSG_CONSTANCIA_PESADA = "La constancia fiscal no debe pesar más de 5 MB";
     public static final String MSG_REGISTRO_EXITOSO = "Cliente registrado con exito";
     public static final String MSG_MODIFICACION_EXITOSA = "Cliente modificado con exito";
 
     private static final Pattern CORREO = Pattern.compile("^[\\w.+-]+@[\\w-]+(\\.[\\w-]+)+$");
-    private static final Pattern TELEFONO = Pattern.compile("^[0-9\\s-]+$");
-    private static final Pattern NO_DIGITOS = Pattern.compile("\\D");
+    private static final Pattern TELEFONO = Pattern.compile("^\\d+$");
     private static final int DIGITOS_TELEFONO = 10;
+    private static final int MAX_NOMBRE = 50;
+    private static final long MAX_CONSTANCIA_BYTES = 5L * 1024 * 1024;
     private static final Pattern ESPACIOS = Pattern.compile("\\s+");
+    private static final Pattern ACENTOS = Pattern.compile("\\p{M}+");
     private static final byte[] FIRMA_PDF = {'%', 'P', 'D', 'F'};
 
     private static final Path CARPETA_CONSTANCIAS = Paths.get(System.getProperty(
@@ -36,27 +40,58 @@ public class ClienteHelper implements Serializable {
     public List<String> validar(String nombreCompleto, Cliente cliente, boolean faltaConstancia) {
         List<String> errores = new ArrayList<>();
 
-        if (vacio(nombreCompleto) || vacio(cliente.getTelefono()) || vacio(cliente.getCorreo()) || faltaConstancia) {
-            errores.add(MSG_CAMPOS_OBLIGATORIOS);
-            return errores;
+        List<String> faltantes = new ArrayList<>();
+        if (vacio(nombreCompleto)) {
+            faltantes.add("nombre");
         }
-        if (palabras(nombreCompleto).length < 2) {
-            errores.add("Escriba el nombre y al menos el apellido paterno del cliente");
+        if (vacio(cliente.getTelefono())) {
+            faltantes.add("teléfono");
         }
-        String telefono = cliente.getTelefono().trim();
-        if (!TELEFONO.matcher(telefono).matches()) {
-            errores.add("El teléfono solo puede contener números");
-        } else if (soloDigitos(telefono).length() != DIGITOS_TELEFONO) {
-            errores.add("El teléfono debe tener 10 dígitos");
+        if (vacio(cliente.getCorreo())) {
+            faltantes.add("correo electrónico");
         }
-        if (!CORREO.matcher(cliente.getCorreo().trim()).matches()) {
+        if (faltaConstancia) {
+            faltantes.add("constancia fiscal");
+        }
+        if (!faltantes.isEmpty()) {
+            errores.add(MSG_CAMPOS_OBLIGATORIOS + ". Falta: " + String.join(", ", faltantes));
+        }
+
+        if (!vacio(nombreCompleto)) {
+            String[] partes = palabras(nombreCompleto);
+            if (String.join(" ", partes).length() > MAX_NOMBRE) {
+                errores.add("El nombre no puede tener más de " + MAX_NOMBRE + " caracteres");
+            } else if (partes.length < 2) {
+                errores.add("Escriba el nombre y al menos el apellido paterno del cliente");
+            }
+        }
+        if (!vacio(cliente.getTelefono())) {
+            String telefono = cliente.getTelefono().trim();
+            if (!TELEFONO.matcher(telefono).matches()) {
+                errores.add("El teléfono solo puede contener números");
+            } else if (telefono.length() != DIGITOS_TELEFONO) {
+                errores.add("El teléfono debe tener 10 dígitos");
+            }
+        }
+        if (!vacio(cliente.getCorreo()) && !CORREO.matcher(cliente.getCorreo().trim()).matches()) {
             errores.add("El correo electrónico no tiene un formato válido");
         }
         return errores;
     }
 
+    /** Valida tamano y formato de la constancia; devuelve el mensaje de error o null si es valida. */
+    public String validarConstancia(byte[] contenido, long tamano) {
+        if (tamano > MAX_CONSTANCIA_BYTES) {
+            return MSG_CONSTANCIA_PESADA;
+        }
+        if (!esPdf(contenido)) {
+            return MSG_SOLO_PDF;
+        }
+        return null;
+    }
+
     /** Verifica que el contenido del archivo sea realmente un PDF. */
-    public boolean esPdf(byte[] contenido) {
+    private boolean esPdf(byte[] contenido) {
         if (contenido == null || contenido.length < FIRMA_PDF.length) {
             return false;
         }
@@ -123,6 +158,26 @@ public class ClienteHelper implements Serializable {
         return ServiceFacadeLocator.getInstanceFacadeCliente().listar();
     }
 
+    /** Devuelve los clientes cuyo nombre contiene el texto buscado, sin distinguir mayusculas ni acentos. */
+    public List<Cliente> filtrar(List<Cliente> clientes, String texto) {
+        if (vacio(texto)) {
+            return clientes;
+        }
+        String buscado = paraBusqueda(String.join(" ", palabras(texto)));
+        List<Cliente> resultado = new ArrayList<>();
+        for (Cliente c : clientes) {
+            if (paraBusqueda(nombreCompleto(c)).contains(buscado)) {
+                resultado.add(c);
+            }
+        }
+        return resultado;
+    }
+
+    /** Quita acentos y pone el texto en minusculas para compararlo. */
+    private static String paraBusqueda(String s) {
+        return ACENTOS.matcher(Normalizer.normalize(s, Normalizer.Form.NFD)).replaceAll("").toLowerCase();
+    }
+
     /** Actualiza el cliente y reemplaza su constancia si se adjunto un PDF nuevo. */
     public Cliente actualizar(Cliente cliente, byte[] nuevaConstanciaPdf) throws IOException {
         normalizar(cliente);
@@ -175,15 +230,10 @@ public class ClienteHelper implements Serializable {
         return destino;
     }
 
-    /** Quita espacios del correo, lo pone en minusculas y deja el telefono solo con sus 10 digitos. */
+    /** Quita espacios del correo y del telefono, y pone el correo en minusculas. */
     private void normalizar(Cliente c) {
         c.setCorreo(c.getCorreo() == null ? null : c.getCorreo().trim().toLowerCase());
-        c.setTelefono(c.getTelefono() == null ? null : soloDigitos(c.getTelefono()));
-    }
-
-    /** Quita del texto todo lo que no sea un digito. */
-    private static String soloDigitos(String s) {
-        return NO_DIGITOS.matcher(s).replaceAll("");
+        c.setTelefono(c.getTelefono() == null ? null : c.getTelefono().trim());
     }
 
     /** Divide un texto en palabras. */

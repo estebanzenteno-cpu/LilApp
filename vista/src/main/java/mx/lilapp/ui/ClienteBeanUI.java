@@ -27,6 +27,7 @@ public class ClienteBeanUI implements Serializable {
     private String nombreConstancia;
 
     private List<Cliente> clientes;
+    private String busqueda;
     private Cliente clienteSeleccionado;
     private String nombreCompletoSeleccionado;
     private byte[] nuevaConstanciaPdf;
@@ -42,8 +43,9 @@ public class ClienteBeanUI implements Serializable {
     /** Recibe el PDF de la constancia fiscal del formulario de registro. */
     public void subirConstanciaFiscal(FileUploadEvent event) {
         UploadedFile archivo = event.getFile();
-        if (!helper.esPdf(archivo.getContent())) {
-            aviso(ClienteHelper.MSG_SOLO_PDF);
+        String errorConstancia = helper.validarConstancia(archivo.getContent(), archivo.getSize());
+        if (errorConstancia != null) {
+            error(errorConstancia);
             return;
         }
         constanciaPdf = archivo.getContent();
@@ -64,7 +66,9 @@ public class ClienteBeanUI implements Serializable {
             limpiarRegistro();
         } catch (NegocioException e) {
             error(e.getMessage());
-        } catch (IOException | RuntimeException e) {
+        } catch (IOException e) {
+            error("No se pudo registrar el cliente: no se pudo guardar la constancia fiscal");
+        } catch (RuntimeException e) {
             error("No se pudo registrar el cliente: " + e.getMessage());
         }
     }
@@ -88,8 +92,9 @@ public class ClienteBeanUI implements Serializable {
     /** Recibe el PDF que reemplazara la constancia actual del cliente. */
     public void subirNuevaConstanciaFiscal(FileUploadEvent event) {
         UploadedFile archivo = event.getFile();
-        if (!helper.esPdf(archivo.getContent())) {
-            aviso(ClienteHelper.MSG_SOLO_PDF);
+        String errorConstancia = helper.validarConstancia(archivo.getContent(), archivo.getSize());
+        if (errorConstancia != null) {
+            error(errorConstancia);
             return;
         }
         nuevaConstanciaPdf = archivo.getContent();
@@ -116,7 +121,9 @@ public class ClienteBeanUI implements Serializable {
             cancelarModificacion();
         } catch (NegocioException e) {
             error(e.getMessage());
-        } catch (IOException | RuntimeException e) {
+        } catch (IOException e) {
+            error("No se pudo modificar el cliente: no se pudo guardar la constancia fiscal");
+        } catch (RuntimeException e) {
             error("No se pudo modificar el cliente: " + e.getMessage());
         }
     }
@@ -139,16 +146,12 @@ public class ClienteBeanUI implements Serializable {
         nuevaConstanciaPdf = null;
         nombreNuevaConstancia = null;
         clientes = null;
+        busqueda = null;
     }
 
     /** Muestra un aviso de exito. */
     private void info(String msg) {
         agregar(FacesMessage.SEVERITY_INFO, msg);
-    }
-
-    /** Muestra un aviso informativo. */
-    private void aviso(String msg) {
-        agregar(FacesMessage.SEVERITY_WARN, msg);
     }
 
     /** Muestra un aviso de error y marca la validacion como fallida. */
@@ -184,6 +187,19 @@ public class ClienteBeanUI implements Serializable {
             clientes = helper.listarClientes();
         }
         return clientes;
+    }
+
+    /** Devuelve los clientes que coinciden con el texto del buscador. */
+    public List<Cliente> getClientesFiltrados() {
+        return helper.filtrar(getClientes(), busqueda);
+    }
+
+    public String getBusqueda() {
+        return busqueda;
+    }
+
+    public void setBusqueda(String busqueda) {
+        this.busqueda = busqueda;
     }
 
     public Cliente getClienteSeleccionado() {

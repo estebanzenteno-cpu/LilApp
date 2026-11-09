@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DelegateCliente {
 
-    public static final String MSG_DATOS_DUPLICADOS = "Los datos introducidos ya coinciden con los de otro cliente";
+    public static final String MSG_DATOS_DUPLICADOS = "El correo electrónico ya está registrado en otro cliente";
 
     /** Registra un cliente nuevo si su correo no pertenece a otro cliente. */
     public void guardar(Cliente cliente) {

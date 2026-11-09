@@ -35,14 +35,20 @@ public final class HibernateUtil {
         return em;
     }
 
-    /** Cierra el EntityManager del hilo actual. */
+    /** Cierra el EntityManager del hilo actual, revirtiendo cualquier transaccion pendiente. */
     public static void closeEntityManager() {
         EntityManager em = EM_THREAD.get();
         if (em != null) {
-            if (em.isOpen()) {
-                em.close();
+            try {
+                if (em.isOpen()) {
+                    if (em.getTransaction().isActive()) {
+                        em.getTransaction().rollback();
+                    }
+                    em.close();
+                }
+            } finally {
+                EM_THREAD.remove();
             }
-            EM_THREAD.remove();
         }
     }
 
