@@ -8,6 +8,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import mx.lilapp.entity.Proveedor;
 import mx.lilapp.helper.ProveedorHelper;
+import mx.lilapp.integration.ServiceFacadeLocator;
 
 import java.io.Serializable;
 import java.util.List;
@@ -35,22 +36,26 @@ public class ProveedorBeanUI implements Serializable{
 
     public void registrar() {
         registroExitoso = false;
-        List<String> errores =
-                helper.validar(proveedor, productosSeleccionados);
 
-        if(!errores.isEmpty()) {
-            errores.forEach(this::mostrarError);
-            return;
-        }
+        try {
+            List<String> errores = ServiceFacadeLocator
+                    .getInstanceFacadeProveedor()
+                    .validarRegistro(proveedor, productosSeleccionados);
 
-        try{
-            helper.guardar(proveedor, productosSeleccionados);
+            if (!errores.isEmpty()) {
+                errores.forEach(this::mostrarError);
+                return;
+            }
+
+            ServiceFacadeLocator
+                    .getInstanceFacadeProveedor()
+                    .registrar(proveedor, productosSeleccionados);
 
             productosRegistrados = helper.listarTiposProducto().stream()
                     .filter(tipo -> java.util.Arrays.asList(productosSeleccionados)
                             .contains(tipo.getIdTipodeProducto()))
                     .map(tipo -> tipo.getNombreProducto())
-                    .collect(java.util.stream.Collectors.joining(", "));
+                    .collect(Collectors.joining(", "));
 
             registroExitoso = true;
 
@@ -60,7 +65,8 @@ public class ProveedorBeanUI implements Serializable{
                             FacesMessage.SEVERITY_INFO,
                             ProveedorHelper.MSG_REGISTRO_EXITOSO,
                             null));
-        }catch (RuntimeException e){
+
+        } catch (RuntimeException e) {
             mostrarError("No se pudo registrar el proveedor: " + e.getMessage());
         }
     }

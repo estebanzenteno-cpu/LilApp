@@ -33,4 +33,16 @@ public class ProveedorDAO extends AbstractDAO<Proveedor> {
                 .setParameter("nombre", "%" + nombre.trim() + "%")
                 .getResultList();
     }
+
+    public boolean existeNombre(String nombre) {
+        Long cantidad = getEntityManager()
+                .createQuery(
+                        "SELECT COUNT(p) FROM Proveedor p "
+                                + "WHERE LOWER(TRIM(p.nombreProveedor)) = LOWER(:nombre)",
+                        Long.class)
+                .setParameter("nombre", nombre.trim())
+                .getSingleResult();
+
+        return cantidad > 0;
+    }
 }

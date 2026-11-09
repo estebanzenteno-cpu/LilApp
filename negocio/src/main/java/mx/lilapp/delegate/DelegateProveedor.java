@@ -39,4 +39,10 @@ public class DelegateProveedor {
     public List<Proveedor> buscarPorNombre(String nombre) {
         return ServiceLocator.getInstanceProveedorDAO().buscarPorNombre(nombre);
     }
+
+    public boolean existeNombre(String nombre) {
+        return ServiceLocator
+                .getInstanceProveedorDAO()
+                .existeNombre(nombre);
+    }
 }
