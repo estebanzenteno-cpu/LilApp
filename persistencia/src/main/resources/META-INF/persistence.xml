@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<!--
-  Unidad de persistencia que usa la aplicacion en ejecucion (HibernateUtil).
-  Revisa puerto, usuario y contraseña de tu MySQL.
--->
+
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
@@ -10,7 +7,7 @@
     <persistence-unit name="persistencePU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <!-- Entidades de la capa entidad (agrega aqui las nuevas) -->
+
         <class>mx.lilapp.entity.Cliente</class>
         <class>mx.lilapp.entity.Proveedor</class>
         <class>mx.lilapp.entity.TipoProducto</class>
@@ -24,11 +21,10 @@
             <property name="jakarta.persistence.jdbc.url"
                       value="jdbc:mysql://localhost:3306/lil_app?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC"/>
             <property name="jakarta.persistence.jdbc.user" value="root"/>
-            <property name="jakarta.persistence.jdbc.password" value="ancona1373"/>
 
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <!-- validate: comprueba que las entidades coincidan con las tablas (no modifica la BD) -->
+
             <property name="hibernate.hbm2ddl.auto" value="validate"/>
 
             <property name="hibernate.hikari.minimumIdle" value="5"/>

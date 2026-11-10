@@ -4,28 +4,37 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public final class HibernateUtil {
 
     private static final String PERSISTENCE_UNIT = "persistencePU";
+    private static final String ENV_DB_PASSWORD = "LILAPP_DB_PASS";
 
     private static final EntityManagerFactory EMF = buildEntityManagerFactory();
     private static final ThreadLocal<EntityManager> EM_THREAD = new ThreadLocal<>();
 
-    /** Evita que se creen instancias de esta clase. */
     private HibernateUtil() {
     }
-
-    /** Crea la EntityManagerFactory de la unidad de persistencia. */
     private static EntityManagerFactory buildEntityManagerFactory() {
         try {
-            return Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
+            String contrasena = System.getenv(ENV_DB_PASSWORD);
+            if (contrasena == null || contrasena.isEmpty()) {
+                throw new IllegalStateException(
+                        "Falta definir la variable de entorno "
+                                + ENV_DB_PASSWORD
+                                + " con la contrasena de MySQL");
+            }
+            Map<String, Object> propiedades = new HashMap<>();
+            propiedades.put("jakarta.persistence.jdbc.password", contrasena);
+            return Persistence.createEntityManagerFactory(PERSISTENCE_UNIT, propiedades);
         } catch (Throwable ex) {
             System.err.println("No se pudo crear la EntityManagerFactory: " + ex);
             throw new ExceptionInInitializerError(ex);
         }
     }
 
-    /** Devuelve el EntityManager del hilo actual, creandolo si no existe. */
     public static EntityManager getEntityManager() {
         EntityManager em = EM_THREAD.get();
         if (em == null || !em.isOpen()) {
@@ -35,7 +44,6 @@ public final class HibernateUtil {
         return em;
     }
 
-    /** Cierra el EntityManager del hilo actual, revirtiendo cualquier transaccion pendiente. */
     public static void closeEntityManager() {
         EntityManager em = EM_THREAD.get();
         if (em != null) {
@@ -52,7 +60,6 @@ public final class HibernateUtil {
         }
     }
 
-    /** Inicia una transaccion si no hay una activa. */
     public static void beginTransaction() {
         EntityManager em = getEntityManager();
         if (!em.getTransaction().isActive()) {
@@ -60,7 +67,6 @@ public final class HibernateUtil {
         }
     }
 
-    /** Confirma la transaccion activa. */
     public static void commit() {
         EntityManager em = getEntityManager();
         if (em.getTransaction().isActive()) {
@@ -68,7 +74,6 @@ public final class HibernateUtil {
         }
     }
 
-    /** Revierte la transaccion activa. */
     public static void rollback() {
         EntityManager em = getEntityManager();
         if (em.getTransaction().isActive()) {
@@ -76,7 +81,6 @@ public final class HibernateUtil {
         }
     }
 
-    /** Cierra el EntityManager y la EntityManagerFactory. */
     public static void shutdown() {
         closeEntityManager();
         if (EMF.isOpen()) {
