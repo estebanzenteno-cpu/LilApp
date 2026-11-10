@@ -862,3 +862,44 @@ body .ui-growl .ui-growl-item-container .ui-growl-icon-close .ui-icon {
     align-items: center;
     line-height: 1.2;
 }
+
+body .ui-button.lit-boton.lit-boton-eliminar {
+    background: var(--lit-rojo);
+    color: #fff;
+}
+
+body .ui-button.lit-boton.lit-boton-eliminar:enabled:hover {
+    background: var(--lit-rojo);
+    color: #fff;
+    filter: brightness(1.15);
+}
+
+.lit-fila-proveedor .ui-button.lit-boton-eliminar {
+    align-self: center !important;
+    margin: 0 !important;
+    float: none !important;
+    transform: none !important;
+    position: static !important;
+    min-width: 100px !important;
+    width: auto !important;
+    white-space: nowrap;
+}
+
+.lit-acciones-eliminar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+
+.lit-acciones-eliminar .ui-button.lit-boton {
+    margin-top: 0 !important;
+}
+
+.lit-nota-eliminar {
+    font-size: .85rem;
+    opacity: .75;
+    text-align: center;
+}

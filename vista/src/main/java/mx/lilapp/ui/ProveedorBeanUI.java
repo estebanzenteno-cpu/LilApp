@@ -7,6 +7,7 @@ import jakarta.faces.model.SelectItem;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import mx.lilapp.entity.Proveedor;
+import mx.lilapp.exception.NegocioException;
 import mx.lilapp.helper.ProveedorHelper;
 import mx.lilapp.integration.ServiceFacadeLocator;
 
@@ -27,6 +28,7 @@ public class ProveedorBeanUI implements Serializable{
     private String busquedaProveedor;
     private List<Proveedor> proveedores;
     private Proveedor proveedorConsulta;
+    private Proveedor proveedorEliminar;
 
     @PostConstruct
     public void init() {
@@ -43,7 +45,7 @@ public class ProveedorBeanUI implements Serializable{
                     .validarRegistro(proveedor, productosSeleccionados);
 
             if (!errores.isEmpty()) {
-                errores.forEach(this::mostrarError);
+                errores.forEach(this::error);
                 return;
             }
 
@@ -67,7 +69,7 @@ public class ProveedorBeanUI implements Serializable{
                             null));
 
         } catch (RuntimeException e) {
-            mostrarError("No se pudo registrar el proveedor: " + e.getMessage());
+            error("No se pudo registrar el proveedor: " + e.getMessage());
         }
     }
 
@@ -88,14 +90,6 @@ public class ProveedorBeanUI implements Serializable{
     public void limpiar(){
         proveedor = new Proveedor();
         productosSeleccionados = new Integer[0];
-    }
-
-    private void mostrarError(String mensaje){
-        FacesContext.getCurrentInstance().addMessage(
-                null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, mensaje, null));
-
-        FacesContext.getCurrentInstance().validationFailed();
     }
 
     public Proveedor getProveedor() {
@@ -152,5 +146,55 @@ public class ProveedorBeanUI implements Serializable{
 
     public Proveedor getProveedorConsulta() {
         return proveedorConsulta;
+    }
+
+    public void seleccionarParaEliminar(Proveedor proveedor) {
+        this.proveedorEliminar = proveedor;
+    }
+
+    public Proveedor getProveedorEliminar() {
+        return proveedorEliminar;
+    }
+
+    public void eliminarProveedor() {
+        if (proveedorEliminar == null) {
+            error("Seleccione un proveedor para eliminar");
+            return;
+        }
+        try {
+            helper.eliminar(proveedorEliminar);
+            cancelarEliminar();
+            proveedores = null;
+            info(ProveedorHelper.MSG_ELIMINACION_EXITOSA);
+        } catch (NegocioException e) {
+            cancelarEliminar();
+            proveedores = null;
+            advertencia(e.getMessage());
+        } catch (RuntimeException e) {
+            error("No se pudo eliminar el proveedor: " + e.getMessage());
+        }
+    }
+
+    public void cancelarEliminar() {
+        proveedorEliminar = null;
+    }
+
+    private void info(String mensaje) {
+        agregar(FacesMessage.SEVERITY_INFO, mensaje);
+    }
+
+    private void advertencia(String mensaje) {
+        agregar(FacesMessage.SEVERITY_WARN, mensaje);
+    }
+
+    private void error(String mensaje) {
+        agregar(FacesMessage.SEVERITY_ERROR, mensaje);
+        FacesContext.getCurrentInstance().validationFailed();
+    }
+
+    private void agregar(FacesMessage.Severity severidad, String mensaje) {
+        FacesContext.getCurrentInstance().addMessage(
+                null,
+                new FacesMessage(severidad, mensaje, null));
     }
 }

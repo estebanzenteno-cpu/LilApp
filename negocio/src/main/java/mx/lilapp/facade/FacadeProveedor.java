@@ -4,11 +4,14 @@ import mx.lilapp.delegate.DelegateProveedor;
 import mx.lilapp.entity.Proveedor;
 import mx.lilapp.delegate.DelegateTipoProducto;
 import mx.lilapp.entity.TipoProducto;
+import mx.lilapp.exception.NegocioException;
 import java.util.ArrayList;
 
 import java.util.List;
 
 public class FacadeProveedor {
+
+    public static final String MSG_PROVEEDOR_INEXISTENTE = "El proveedor ya no existe";
 
     private final DelegateProveedor delegateProveedor = new DelegateProveedor();
 
@@ -24,7 +27,14 @@ public class FacadeProveedor {
 
     /** Elimina un proveedor. */
     public void eliminar(Proveedor proveedor) {
-        delegateProveedor.eliminar(proveedor);
+        Proveedor actual = null;
+        if (proveedor != null && proveedor.getIdProveedor() != null) {
+            actual = delegateProveedor.buscarPorId(proveedor.getIdProveedor());
+        }
+        if (actual == null) {
+            throw new NegocioException(MSG_PROVEEDOR_INEXISTENTE);
+        }
+        delegateProveedor.eliminar(actual);
     }
 
     /** Busca un proveedor por su id. */

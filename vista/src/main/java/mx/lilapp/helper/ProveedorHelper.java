@@ -12,6 +12,8 @@ import java.util.List;
 public class ProveedorHelper implements Serializable {
     public static final String MSG_REGISTRO_EXITOSO =
             "Proveedor resgitrado con exito";
+    public static final String MSG_ELIMINACION_EXITOSA =
+            "Proveedor eliminado con exito";
 
     public List<TipoProducto> listarTiposProducto(){
         return ServiceFacadeLocator
@@ -33,5 +35,11 @@ public class ProveedorHelper implements Serializable {
         return ServiceFacadeLocator
                 .getInstanceFacadeProveedor()
                 .buscarPorNombre(nombre.trim());
+    }
+
+    public void eliminar(Proveedor proveedor) {
+        ServiceFacadeLocator
+                .getInstanceFacadeProveedor()
+                .eliminar(proveedor);
     }
 }

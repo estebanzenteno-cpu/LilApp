@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="frmEliminarProveedor" styleClass="lit-consulta">
+
+        <div class="lit-busqueda-proveedor">
+            <i class="pi pi-search" aria-hidden="true"></i>
+
+            <p:inputText id="busqueda"
+                         value="#{proveedorUI.busquedaProveedor}"
+                         placeholder="Buscar proveedores disponibles"
+                         styleClass="lit-input"/>
+
+            <p:commandButton value="Buscar"
+                             action="#{proveedorUI.buscarProveedores}"
+                             process="@this busqueda"
+                             update=":contenido :msgs"
+                             styleClass="lit-boton"/>
+
+            <p:commandButton value="Limpiar"
+                             action="#{proveedorUI.limpiarBusqueda}"
+                             process="@this"
+                             update=":contenido :msgs"
+                             styleClass="lit-boton lit-boton-limpiar"/>
+        </div>
+
+        <h:panelGroup id="resultados" layout="block">
+
+            <h:panelGroup rendered="#{not empty proveedorUI.proveedores}"
+                           layout="block"
+                           styleClass="lit-tabla-proveedores">
+
+                <ui:repeat value="#{proveedorUI.proveedores}" var="p">
+                    <div class="lit-fila-proveedor">
+                        <h:outputText value="#{p.nombreProveedor}"
+                                       styleClass="lit-nombre-proveedor"/>
+
+                        <p:commandButton value="ELIMINAR"
+                                         action="#{proveedorUI.seleccionarParaEliminar(p)}"
+                                         process="@this"
+                                         update=":frmEliminarProveedor:dlgEliminarContenido"
+                                         oncomplete="PF('dlgEliminar').show()"
+                                         styleClass="lit-boton lit-boton-eliminar"/>
+                    </div>
+                </ui:repeat>
+
+            </h:panelGroup>
+
+            <h:panelGroup layout="block"
+                          styleClass="lit-mensaje-vacio"
+                          rendered="#{empty proveedorUI.proveedores}">
+                <h:outputText value="#{empty proveedorUI.busquedaProveedor
+                              ? 'No hay proveedores registrados.'
+                              : 'No se encontraron proveedores.'}"/>
+            </h:panelGroup>
+
+        </h:panelGroup>
+
+        <p:dialog id="dlgEliminar"
+                  widgetVar="dlgEliminar"
+                  header="Eliminar proveedor"
+                  modal="true"
+                  closable="true"
+                  resizable="false">
+
+            <h:panelGroup id="dlgEliminarContenido" layout="block">
+
+                <h:panelGroup rendered="#{not empty proveedorUI.proveedorEliminar}">
+
+                    <p>
+                        <h:outputText value="¿Eliminar el proveedor "/>
+                        <strong>#{proveedorUI.proveedorEliminar.nombreProveedor}</strong>
+                        <h:outputText value="?"/>
+                    </p>
+
+                    <p class="lit-nota-eliminar">Esta acción no se puede deshacer.</p>
+
+                    <div class="lit-acciones-eliminar">
+                        <p:commandButton value="Confirmar"
+                                         action="#{proveedorUI.eliminarProveedor}"
+                                         process="@this"
+                                         update=":contenido :msgs"
+                                         oncomplete="PF('dlgEliminar').hide()"
+                                         styleClass="lit-boton lit-boton-eliminar"/>
+
+                        <p:commandButton value="Cancelar"
+                                         type="button"
+                                         onclick="PF('dlgEliminar').hide()"
+                                         styleClass="lit-boton lit-boton-limpiar"/>
+                    </div>
+
+                </h:panelGroup>
+
+            </h:panelGroup>
+        </p:dialog>
+
+    </h:form>
+</ui:composition>
