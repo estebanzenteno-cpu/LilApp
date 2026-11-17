@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "proveedor")
+@Table(name = "Proveedor")
 public class Proveedor implements Serializable {
 
     @Id
