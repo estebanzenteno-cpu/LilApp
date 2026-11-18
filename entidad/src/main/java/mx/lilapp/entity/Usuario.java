@@ -23,6 +23,18 @@ public class Usuario implements Serializable {
     @Column(name = "contrasena", nullable = false, length = 255)
     private String contrasena;
 
+    @ManyToOne
+    @JoinColumn(name = "idProducto")
+    private Producto producto;
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
     public Integer getIdUsuario() {
         return idUsuario;
     }

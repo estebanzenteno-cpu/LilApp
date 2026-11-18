@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.io.Serializable;
@@ -29,10 +27,6 @@ public class Producto implements Serializable {
 
     @Column(name = "precio", precision = 10, scale = 2)
     private BigDecimal precio;
-
-    @ManyToOne
-    @JoinColumn(name = "idUsuario")
-    private Usuario usuario;
 
     public Integer getIdProducto() {
         return idProducto;
@@ -64,13 +58,5 @@ public class Producto implements Serializable {
 
     public void setPrecio(BigDecimal precio) {
         this.precio = precio;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 }
