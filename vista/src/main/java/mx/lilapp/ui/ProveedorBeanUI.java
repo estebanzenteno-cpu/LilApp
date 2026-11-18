@@ -27,6 +27,8 @@ public class ProveedorBeanUI implements Serializable{
     private String busquedaProveedor;
     private List<Proveedor> proveedores;
     private Proveedor proveedorConsulta;
+    private Proveedor proveedorEdicion;
+    private Integer[] productosEdicion;
 
     @PostConstruct
     public void init() {
@@ -153,4 +155,40 @@ public class ProveedorBeanUI implements Serializable{
     public Proveedor getProveedorConsulta() {
         return proveedorConsulta;
     }
+
+    public void seleccionarProveedor(Proveedor seleccionado) {
+        proveedorEdicion = new Proveedor();
+        proveedorEdicion.setIdProveedor(seleccionado.getIdProveedor());
+        proveedorEdicion.setNombreProveedor(seleccionado.getNombreProveedor());
+        proveedorEdicion.setTelefono(seleccionado.getTelefono());
+        proveedorEdicion.setDireccion(seleccionado.getDireccion());
+        productosEdicion = seleccionado.getTiposProducto().stream()
+                .map(tipo -> tipo.getIdTipodeProducto()).toArray(Integer[]::new);
+    }
+
+    public void cancelarEdicion() {
+        proveedorEdicion = null;
+        productosEdicion = null;
+    }
+
+    public void guardarModificacion() {
+        try {
+            ServiceFacadeLocator.getInstanceFacadeProveedor().modificar(proveedorEdicion, productosEdicion);
+        } catch (IllegalArgumentException e) {
+            mostrarError(e.getMessage());
+            return;
+        } catch (RuntimeException e) {
+            mostrarError("No se pudo guardar la modificación del proveedor. Inténtalo de nuevo.");
+            return;
+        }
+        cancelarEdicion();
+        proveedores = null;
+        busquedaProveedor = null;
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Proveedor modificado con éxito.", null));
+    }
+
+    public Proveedor getProveedorEdicion() { return proveedorEdicion; }
+    public Integer[] getProductosEdicion() { return productosEdicion; }
+    public void setProductosEdicion(Integer[] productosEdicion) { this.productosEdicion = productosEdicion; }
 }

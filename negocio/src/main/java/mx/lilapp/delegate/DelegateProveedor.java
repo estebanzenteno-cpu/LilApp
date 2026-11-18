@@ -7,6 +7,14 @@ import java.util.List;
 
 public class DelegateProveedor {
 
+    public boolean existeNombreEnOtroProveedor(String nombre, Integer id) {
+        return ServiceLocator.getInstanceProveedorDAO().existeNombreEnOtroProveedor(nombre, id);
+    }
+
+    public void modificarExistente(Proveedor proveedor) {
+        ServiceLocator.getInstanceProveedorDAO().modificarExistente(proveedor);
+    }
+
     /** Registra un proveedor nuevo. */
     public void guardar(Proveedor proveedor) {
         ServiceLocator.getInstanceProveedorDAO().save(proveedor);

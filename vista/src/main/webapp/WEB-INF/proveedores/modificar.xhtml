@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui">
+    <h:panelGroup id="pnlModificarProveedor" layout="block">
+        <h:form rendered="#{empty proveedorUI.proveedorEdicion}" styleClass="lit-consulta">
+            <div class="lit-busqueda-proveedor">
+                <p:inputText id="busqueda" value="#{proveedorUI.busquedaProveedor}"
+                             placeholder="Buscar proveedores disponibles" styleClass="lit-input"/>
+                <p:commandButton value="Buscar" action="#{proveedorUI.buscarProveedores}"
+                                 process="@this busqueda" update=":pnlModificarProveedor :msgs" styleClass="lit-boton"/>
+                <p:commandButton value="Limpiar" action="#{proveedorUI.limpiarBusqueda}"
+                                 process="@this" update=":pnlModificarProveedor" styleClass="lit-boton"/>
+            </div>
+            <div class="lit-tabla-proveedores">
+                <ui:repeat value="#{proveedorUI.proveedores}" var="p">
+                    <div class="lit-fila-proveedor">
+                        <h:outputText value="#{p.nombreProveedor}" styleClass="lit-nombre-proveedor"/>
+                        <p:commandButton value="MODIFICAR" action="#{proveedorUI.seleccionarProveedor(p)}"
+                                         process="@this" update=":pnlModificarProveedor :msgs" styleClass="lit-boton"/>
+                    </div>
+                </ui:repeat>
+                <h:outputText rendered="#{empty proveedorUI.proveedores}" value="No se encontraron proveedores."/>
+            </div>
+        </h:form>
+        <h:form rendered="#{not empty proveedorUI.proveedorEdicion}" styleClass="lit-form">
+            <p:inputText id="nombre" value="#{proveedorUI.proveedorEdicion.nombreProveedor}" placeholder="Nombre del proveedor*"
+                         maxlength="50" required="true" requiredMessage="Escribe el nombre del proveedor." styleClass="lit-input lit-ancho"/>
+            <div class="lit-fila">
+                <p:inputText id="telefono" value="#{proveedorUI.proveedorEdicion.telefono}" placeholder="Teléfono*"
+                             maxlength="10" required="true" requiredMessage="Escribe el teléfono." styleClass="lit-input"/>
+                <p:inputText id="direccion" value="#{proveedorUI.proveedorEdicion.direccion}" placeholder="Dirección*"
+                             maxlength="100" required="true" requiredMessage="Escribe la dirección." styleClass="lit-input"/>
+            </div>
+            <div class="lit-tipo-producto">
+                <p:outputLabel for="productos" value="Tipos de producto*"/>
+                <p:selectCheckboxMenu id="productos" value="#{proveedorUI.productosEdicion}" label="Selecciona productos"
+                                      multiple="true" filter="true" filterMatchMode="contains" required="true"
+                                      requiredMessage="Elija al menos un tipo de producto.">
+                    <f:selectItems value="#{proveedorUI.opcionesProducto}"/>
+                </p:selectCheckboxMenu>
+            </div>
+            <div class="lit-acciones">
+                <p:commandButton value="Guardar" action="#{proveedorUI.guardarModificacion}" process="@form"
+                                 update=":pnlModificarProveedor :msgs" styleClass="lit-boton"/>
+                <p:commandButton value="Cancelar" action="#{proveedorUI.cancelarEdicion}" process="@this"
+                                 update=":pnlModificarProveedor :msgs" styleClass="lit-boton"/>
+            </div>
+        </h:form>
+    </h:panelGroup>
+</ui:composition>

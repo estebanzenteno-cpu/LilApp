@@ -35,6 +35,11 @@ public final class HibernateUtil {
         return em;
     }
 
+    /** Crea un contexto independiente para lecturas que deben reflejar la base actual. */
+    public static EntityManager nuevoEntityManager() {
+        return EMF.createEntityManager();
+    }
+
     /** Cierra el EntityManager del hilo actual, revirtiendo cualquier transaccion pendiente. */
     public static void closeEntityManager() {
         EntityManager em = EM_THREAD.get();
