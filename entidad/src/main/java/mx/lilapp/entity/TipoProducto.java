@@ -12,10 +12,10 @@ public class TipoProducto implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idTipodeProducto", nullable = false)
+    @Column(name = "idTipoProducto", nullable = false)
     private Integer idTipodeProducto;
 
-    @Column(name = "nombreProducto", nullable = false, unique = true, length = 100)
+    @Column(name = "nombre", nullable = false, unique = true, length = 50)
     private String nombreProducto;
 
     @ManyToMany(mappedBy = "tiposProducto")

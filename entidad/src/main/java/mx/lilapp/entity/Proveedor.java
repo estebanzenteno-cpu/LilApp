@@ -15,7 +15,7 @@ public class Proveedor implements Serializable {
     @Column(name = "idProveedor", nullable = false)
     private Integer idProveedor;
 
-    @Column(name = "nombreProveedor", nullable = false, length = 150)
+    @Column(name = "nombre", nullable = false, length = 50)
     private String nombreProveedor;
 
     @Column(name = "telefono", length = 20)
@@ -25,9 +25,9 @@ public class Proveedor implements Serializable {
     private String direccion;
 
     @ManyToMany
-    @JoinTable(name = "ofrece",
+    @JoinTable(name = "proveedor_tipoproducto",
             joinColumns = @JoinColumn(name = "idProveedor"),
-            inverseJoinColumns = @JoinColumn(name = "idTipodeProducto"))
+            inverseJoinColumns = @JoinColumn(name = "idTipoProducto"))
     private Set<TipoProducto> tiposProducto = new HashSet<>();
 
     public Integer getIdProveedor() {

@@ -12,7 +12,9 @@ public class TestConexion {
                     + em.createNativeQuery("SELECT DATABASE()").getSingleResult());
 
             for (Class<?> entidad : new Class<?>[]{
-                    Cliente.class, Proveedor.class, TipoProducto.class, Rol.class, Usuario.class}) {
+                    Cliente.class, Proveedor.class, TipoProducto.class, Rol.class, Usuario.class,
+                    Producto.class, Archivo.class, Cotizacion.class, DetalleCotizacion.class,
+                    Pedido.class, DetallePedido.class, Pago.class}) {
                 Long total = em.createQuery("SELECT COUNT(e) FROM " + entidad.getSimpleName() + " e", Long.class)
                         .getSingleResult();
                 System.out.println(entidad.getSimpleName() + ": " + total + " registros");

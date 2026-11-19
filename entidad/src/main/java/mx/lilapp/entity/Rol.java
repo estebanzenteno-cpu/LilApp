@@ -13,7 +13,7 @@ public class Rol implements Serializable {
     @Column(name = "idRol", nullable = false)
     private Integer idRol;
 
-    @Column(name = "nombreRol", nullable = false, unique = true, length = 50)
+    @Column(name = "nombre", nullable = false, unique = true, length = 30)
     private String nombreRol;
 
     public Integer getIdRol() {

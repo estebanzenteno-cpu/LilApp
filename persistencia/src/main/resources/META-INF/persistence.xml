@@ -16,6 +16,13 @@
         <class>mx.lilapp.entity.TipoProducto</class>
         <class>mx.lilapp.entity.Rol</class>
         <class>mx.lilapp.entity.Usuario</class>
+        <class>mx.lilapp.entity.Producto</class>
+        <class>mx.lilapp.entity.Archivo</class>
+        <class>mx.lilapp.entity.Cotizacion</class>
+        <class>mx.lilapp.entity.DetalleCotizacion</class>
+        <class>mx.lilapp.entity.Pedido</class>
+        <class>mx.lilapp.entity.DetallePedido</class>
+        <class>mx.lilapp.entity.Pago</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
