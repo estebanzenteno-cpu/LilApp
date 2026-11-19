@@ -4,9 +4,9 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <h:form id="frmConsultaCliente"
-            styleClass="lit-lista lit-consulta-clientes">
+            styleClass="lit-consulta-clientes">
 
-        <h:panelGroup id="contenidoConsulta" layout="block">
+        <h:panelGroup id="contenidoConsulta" layout="block" styleClass="lit-lista">
             <h:panelGroup layout="block"
                           rendered="#{empty consultaClienteUI.clientesActivos}"
                           styleClass="lit-clientes lit-clientes-panel-vacio">
@@ -14,8 +14,7 @@
                               styleClass="lit-clientes-vacio"/>
             </h:panelGroup>
 
-            <h:panelGroup layout="block"
-                          rendered="#{not empty consultaClienteUI.clientesActivos}">
+            <ui:fragment rendered="#{not empty consultaClienteUI.clientesActivos}">
                 <div class="lit-buscador">
                     <svg class="lit-lupa" viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="10.8" cy="10.8" r="6.4"/>
@@ -42,7 +41,7 @@
                                                  process="@this"
                                                  update=":frmConsultaCliente:dlgClienteContenido"
                                                  oncomplete="PF('dlgConsultaCliente').show()"
-                                                 styleClass="lit-boton lit-boton-lista"/>
+                                                 styleClass="lit-boton-lista"/>
                             </div>
                         </ui:repeat>
                     </div>
@@ -53,7 +52,7 @@
                         <h:outputText value="No se encontraron clientes con ese criterio."/>
                     </h:panelGroup>
                 </h:panelGroup>
-            </h:panelGroup>
+            </ui:fragment>
         </h:panelGroup>
 
         <h:outputText id="sinClientes" value=" "

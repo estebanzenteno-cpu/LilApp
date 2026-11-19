@@ -863,28 +863,6 @@ body .ui-growl .ui-growl-item-container .ui-growl-icon-close .ui-icon {
     line-height: 1.2;
 }
 
-/* Pantalla Consultar cliente: mantiene el diseño de la lista principal. */
-.lit-lista.lit-consulta-clientes {
-    max-width: 500px;
-    margin: .3rem auto 0;
-    gap: 1rem;
-}
-
-.lit-consulta-clientes .lit-clientes-scroll {
-    max-height: 213px;
-}
-
-.lit-consulta-clientes .lit-cliente {
-    min-height: 40px;
-    padding: .35rem 6px;
-}
-
-body .lit-consulta-clientes .ui-button.lit-boton-lista {
-    width: 72px;
-    min-width: 72px;
-    margin: 0;
-}
-
 .lit-consulta-clientes .lit-clientes-panel-vacio,
 .lit-eliminar-clientes .lit-clientes-panel-vacio {
     box-sizing: border-box;
@@ -983,18 +961,7 @@ body .ui-button.lit-aviso-clientes-boton:enabled:hover {
 }
 
 /* Pantalla Eliminar cliente y sus avisos. */
-.lit-lista.lit-eliminar-clientes {
-    max-width: 540px;
-    margin: .3rem auto 0;
-    gap: 1rem;
-}
-
-.lit-eliminar-contenido {
-    width: 100%;
-}
-
 body .lit-eliminar-clientes .ui-button.lit-boton-eliminar {
-    min-width: 82px;
     margin: 0;
     border: 0;
     border-radius: 6px;
