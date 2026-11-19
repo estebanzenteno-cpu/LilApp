@@ -73,6 +73,35 @@ public class FacadeProveedor {
     }
 
     public List<String> validarRegistro(Proveedor proveedor, Integer[] idsProductos) {
+        return validarDatos(proveedor, idsProductos, false);
+    }
+
+    public List<String> validarModificacion(Proveedor proveedor, Integer[] idsProductos) {
+        return validarDatos(proveedor, idsProductos, true);
+    }
+
+    public void modificar(Proveedor datos, Integer[] idsProductos) {
+        List<String> errores = validarModificacion(datos, idsProductos);
+        if (!errores.isEmpty()) {
+            throw new IllegalArgumentException(String.join(" ", errores));
+        }
+        java.util.Set<TipoProducto> tipos = new java.util.HashSet<>();
+        DelegateTipoProducto delegateTipo = new DelegateTipoProducto();
+        for (Integer id : idsProductos) {
+            TipoProducto tipo = delegateTipo.buscarPorId(id);
+            if (tipo == null) {
+                throw new IllegalArgumentException("Uno de los tipos de producto ya no existe.");
+            }
+            tipos.add(tipo);
+        }
+        datos.setNombreProveedor(datos.getNombreProveedor().trim());
+        datos.setTelefono(datos.getTelefono().trim());
+        datos.setDireccion(datos.getDireccion().trim());
+        datos.setTiposProducto(tipos);
+        delegateProveedor.modificarExistente(datos);
+    }
+
+    private List<String> validarDatos(Proveedor proveedor, Integer[] idsProductos, boolean modificacion) {
         List<String> errores = new ArrayList<>();
 
         if (proveedor == null
@@ -103,7 +132,11 @@ public class FacadeProveedor {
             errores.add("Elija al menos un tipo de producto.");
         }
 
-        if (nombre.length() <= 50 && existeNombre(nombre)) {
+        if (modificacion && proveedor.getIdProveedor() == null) {
+            errores.add("Seleccione un proveedor válido.");
+        } else if (nombre.length() <= 50 && (modificacion
+                ? delegateProveedor.existeNombreEnOtroProveedor(nombre, proveedor.getIdProveedor())
+                : existeNombre(nombre))) {
             errores.add("Ya existe un proveedor registrado con ese nombre.");
         }
 

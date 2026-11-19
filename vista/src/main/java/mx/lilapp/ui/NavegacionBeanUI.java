@@ -15,6 +15,7 @@ public class NavegacionBeanUI implements Serializable {
     public static final String MODIFICAR = "modificar";
     public static final String REGISTRAR_PROVEEDOR = "registrar-proveedor";
     public static final String CONSULTAR_PROVEEDOR = "consulta-proveedor";
+    public static final String MODIFICAR_PROVEEDOR = "modificar-proveedor";
 
     @Inject
     private ClienteBeanUI clienteUI;
@@ -28,7 +29,8 @@ public class NavegacionBeanUI implements Serializable {
     public void ir(String destino) {
         clienteUI.limpiarRegistro();
         clienteUI.cancelarModificacion();
-        if (CONSULTAR_PROVEEDOR.equals(destino)) {
+        proveedorUI.cancelarEdicion();
+        if (CONSULTAR_PROVEEDOR.equals(destino) || MODIFICAR_PROVEEDOR.equals(destino)) {
             proveedorUI.limpiarBusqueda();
         }
         pagina = destino;
@@ -36,7 +38,9 @@ public class NavegacionBeanUI implements Serializable {
 
     /** Regresa a la lista si se esta editando un cliente, o al menu principal en otro caso. */
     public void regresar() {
-        if (MODIFICAR.equals(pagina) && clienteUI.getClienteSeleccionado() != null) {
+        if (MODIFICAR_PROVEEDOR.equals(pagina) && proveedorUI.getProveedorEdicion() != null) {
+            proveedorUI.cancelarEdicion();
+        } else if (MODIFICAR.equals(pagina) && clienteUI.getClienteSeleccionado() != null) {
             clienteUI.cancelarModificacion();
         } else {
             ir(MENU);
@@ -54,6 +58,8 @@ public class NavegacionBeanUI implements Serializable {
                 return "REGISTRAR PROVEEDOR";
             case CONSULTAR_PROVEEDOR:
                 return "CONSULTAR PROVEEDOR";
+            case MODIFICAR_PROVEEDOR:
+                return "MODIFICAR PROVEEDOR";
             default:
                 return "";
         }

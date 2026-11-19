@@ -862,3 +862,7 @@ body .ui-growl .ui-growl-item-container .ui-growl-icon-close .ui-icon {
     align-items: center;
     line-height: 1.2;
 }
+
+#pnlModificarProveedor .lit-fila-proveedor .ui-button.lit-boton {
+    margin-top: 0;
+}
