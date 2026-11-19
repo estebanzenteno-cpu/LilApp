@@ -1,5 +1,6 @@
 package mx.lilapp.delegate;
 
+import jakarta.persistence.PersistenceException;
 import mx.lilapp.entity.Cliente;
 import mx.lilapp.entity.EstatusCliente;
 import mx.lilapp.exception.NegocioException;
@@ -41,16 +42,31 @@ public class DelegateCliente {
 
     /** Elimina un cliente. */
     public void eliminar(Cliente cliente) {
-        ServiceLocator.getInstanceClienteDAO().delete(cliente);
+        if (cliente == null || cliente.getIdCliente() == null) {
+            throw new NegocioException("Seleccione un cliente válido para eliminar");
+        }
+
+        ClienteDAO dao = ServiceLocator.getInstanceClienteDAO();
+        Cliente clienteExistente = dao.buscarClientePorId(cliente.getIdCliente());
+        if (clienteExistente == null) {
+            throw new NegocioException("El cliente que intenta eliminar ya no existe");
+        }
+
+        try {
+            dao.eliminarCliente(clienteExistente);
+        } catch (PersistenceException e) {
+            throw new NegocioException(
+                    "No se puede eliminar el cliente porque tiene pedidos o cotizaciones relacionados");
+        }
     }
 
     /** Busca un cliente por su id. */
     public Cliente buscarPorId(Integer id) {
-        return ServiceLocator.getInstanceClienteDAO().find(id);
+        return ServiceLocator.getInstanceClienteDAO().buscarClientePorId(id);
     }
 
     /** Devuelve todos los clientes. */
     public List<Cliente> listar() {
-        return ServiceLocator.getInstanceClienteDAO().findAll();
+        return ServiceLocator.getInstanceClienteDAO().listarClientes();
     }
 }
