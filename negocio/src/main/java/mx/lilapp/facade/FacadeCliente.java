@@ -24,6 +24,11 @@ public class FacadeCliente {
         delegateCliente.eliminar(cliente);
     }
 
+    /** Elimina un cliente desde el flujo de la vista de eliminación. */
+    public void eliminarCliente(Cliente cliente) {
+        delegateCliente.eliminar(cliente);
+    }
+
     /** Busca un cliente por su id. */
     public Cliente buscarPorId(Integer id) {
         return delegateCliente.buscarPorId(id);
@@ -31,6 +36,11 @@ public class FacadeCliente {
 
     /** Devuelve todos los clientes. */
     public List<Cliente> listar() {
+        return delegateCliente.listar();
+    }
+
+    /** Devuelve los clientes para la vista de consulta. */
+    public List<Cliente> consultarClientes() {
         return delegateCliente.listar();
     }
 }

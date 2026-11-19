@@ -1,0 +1,94 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="frmEliminarCliente" styleClass="lit-eliminar-clientes">
+        <h:panelGroup id="contenidoEliminar" layout="block" styleClass="lit-lista">
+
+            <ui:fragment rendered="#{not eliminarClienteUI.errorCarga and not empty eliminarClienteUI.clientes}">
+                <div class="lit-buscador">
+                    <svg class="lit-lupa" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="10.8" cy="10.8" r="6.4"/>
+                        <path d="m15.5 15.5 5 5"/>
+                    </svg>
+                    <p:inputText id="busqueda"
+                                 value="#{eliminarClienteUI.busqueda}"
+                                 placeholder="Buscar clientes disponibles"
+                                 autocomplete="off"
+                                 styleClass="lit-buscador-input">
+                        <p:ajax event="keyup" delay="250" process="@this" update="listaClientes"/>
+                    </p:inputText>
+                </div>
+
+                <h:panelGroup id="listaClientes" layout="block" styleClass="lit-clientes">
+                    <div class="lit-clientes-scroll">
+                        <ui:repeat value="#{eliminarClienteUI.clientesFiltrados}" var="cliente">
+                            <div class="lit-cliente">
+                                <h:outputText value="#{eliminarClienteUI.nombreCompleto(cliente)}"
+                                              styleClass="lit-cliente-nombre"/>
+                                <p:commandButton value="ELIMINAR"
+                                                 action="#{eliminarClienteUI.seleccionarCliente(cliente)}"
+                                                 process="@this"
+                                                 update=":frmEliminarCliente:dlgConfirmacionContenido"
+                                                 oncomplete="PF('dlgEliminarCliente').show()"
+                                                 styleClass="lit-boton-lista lit-boton-eliminar"/>
+                            </div>
+                        </ui:repeat>
+                        <h:outputText value="#{eliminarClienteUI.mensajeListaVacia}"
+                                      rendered="#{empty eliminarClienteUI.clientesFiltrados}"
+                                      styleClass="lit-clientes-vacio"/>
+                    </div>
+                </h:panelGroup>
+            </ui:fragment>
+
+            <h:panelGroup layout="block"
+                          rendered="#{eliminarClienteUI.errorCarga or empty eliminarClienteUI.clientes}"
+                          styleClass="lit-clientes lit-clientes-panel-vacio">
+                <h:outputText value="#{eliminarClienteUI.mensajeListaVacia}"
+                              styleClass="lit-clientes-vacio"/>
+            </h:panelGroup>
+        </h:panelGroup>
+
+        <p:dialog id="dlgConfirmacion"
+                  widgetVar="dlgEliminarCliente"
+                  header="Confirmar eliminación"
+                  modal="true" closable="false" closeOnEscape="false" resizable="false"
+                  styleClass="lit-dialogo-confirmacion lit-dialogo-eliminar">
+            <h:panelGroup id="dlgConfirmacionContenido" layout="block">
+                <div class="lit-eliminar-confirmacion">
+                    <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+                    <h:outputText value="#{eliminarClienteUI.mensajeConfirmacion}"/>
+                </div>
+            </h:panelGroup>
+            <f:facet name="footer">
+                <p:commandButton type="button" value="Cancelar"
+                                 onclick="PF('dlgEliminarCliente').hide()"
+                                 styleClass="ui-confirmdialog-no lit-boton"/>
+                <p:commandButton value="Eliminar"
+                                 action="#{eliminarClienteUI.confirmarEliminacion}"
+                                 process="@this"
+                                 update=":frmEliminarCliente:contenidoEliminar :msgs"
+                                 oncomplete="if (args &amp;&amp; args.eliminacionFinalizada) { PF('dlgEliminarCliente').hide(); if (args.eliminacionExitosa) PF('dlgEliminacionExitosa').show(); }"
+                                 styleClass="ui-confirmdialog-yes lit-boton lit-eliminar-confirmar"/>
+            </f:facet>
+        </p:dialog>
+
+        <p:dialog id="dlgEliminacionExitosa"
+                  widgetVar="dlgEliminacionExitosa"
+                  header="Eliminación exitosa"
+                  modal="true" closable="false" closeOnEscape="true" resizable="false"
+                  styleClass="lit-dialogo-confirmacion lit-dialogo-eliminacion-exitosa">
+            <div class="lit-eliminacion-exitosa">
+                <i class="pi pi-check-circle" aria-hidden="true"></i>
+                <h:outputText value="Se eliminó el cliente con éxito."/>
+            </div>
+            <f:facet name="footer">
+                <p:commandButton type="button" value="Aceptar"
+                                 onclick="PF('dlgEliminacionExitosa').hide()"
+                                 styleClass="lit-boton"/>
+            </f:facet>
+        </p:dialog>
+    </h:form>
+</ui:composition>

@@ -155,7 +155,17 @@ public class ClienteHelper implements Serializable {
 
     /** Devuelve todos los clientes registrados. */
     public List<Cliente> listarClientes() {
-        return ServiceFacadeLocator.getInstanceFacadeCliente().listar();
+        return ServiceFacadeLocator.getInstanceFacadeCliente().consultarClientes();
+    }
+
+    /** Busca un cliente por su identificador para las vistas de consulta y eliminación. */
+    public Cliente buscarClientePorId(Integer idCliente) {
+        return ServiceFacadeLocator.getInstanceFacadeCliente().buscarPorId(idCliente);
+    }
+
+    /** Solicita a las capas de negocio y persistencia la eliminación del cliente. */
+    public void eliminarCliente(Cliente cliente) {
+        ServiceFacadeLocator.getInstanceFacadeCliente().eliminarCliente(cliente);
     }
 
     /** Devuelve los clientes cuyo nombre contiene el texto buscado, sin distinguir mayusculas ni acentos. */

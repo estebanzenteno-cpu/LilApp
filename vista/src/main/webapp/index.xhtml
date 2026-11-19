@@ -25,7 +25,10 @@
                         <span class="tarjeta-texto">REGISTRAR CLIENTE</span>
                     </p:commandLink>
 
-                    <a class="tarjeta" href="#" title="Disponible próximamente" onclick="return false;">
+                    <p:commandLink action="#{navegacionUI.consultarCliente}" process="@this"
+                                   update=":contenido :titulo :frmRegresar"
+                                   oncomplete="if (document.getElementById('frmConsultaCliente:sinClientes')) PF('dlgSinClientes').show()"
+                                   styleClass="tarjeta">
                         <span class="tarjeta-icono">
                             <svg viewBox="0 0 100 80" aria-hidden="true">
                                 <circle cx="40" cy="26" r="14"/>
@@ -40,9 +43,10 @@
                             </svg>
                         </span>
                         <span class="tarjeta-texto">CONSULTAR CLIENTE</span>
-                    </a>
+                    </p:commandLink>
 
-                    <a class="tarjeta" href="#" title="Disponible próximamente" onclick="return false;">
+                    <p:commandLink action="#{navegacionUI.eliminarCliente}" process="@this"
+                                   update=":contenido :titulo :frmRegresar" styleClass="tarjeta">
                         <span class="tarjeta-icono">
                             <svg viewBox="0 0 100 80" aria-hidden="true">
                                 <circle cx="48" cy="28" r="14"/>
@@ -54,7 +58,7 @@
                             </svg>
                         </span>
                         <span class="tarjeta-texto">ELIMINAR CLIENTE</span>
-                    </a>
+                    </p:commandLink>
 
                     <p:commandLink action="#{navegacionUI.ir('modificar')}" process="@this"
                                    update=":contenido :titulo :frmRegresar" styleClass="tarjeta">
@@ -157,6 +161,16 @@
 
             <h:panelGroup layout="block" rendered="#{navegacionUI.pagina eq 'modificar'}">
                 <ui:include src="/WEB-INF/clientes/modificar.xhtml"/>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block"
+                          rendered="#{navegacionUI.pagina eq 'consulta-cliente'}">
+                <ui:include src="/WEB-INF/clientes/consulta.xhtml"/>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block"
+                          rendered="#{navegacionUI.pagina eq 'eliminar-cliente'}">
+                <ui:include src="/WEB-INF/clientes/eliminar.xhtml"/>
             </h:panelGroup>
 
             <h:panelGroup layout="block" rendered="#{navegacionUI.pagina eq 'registrar-proveedor'}">

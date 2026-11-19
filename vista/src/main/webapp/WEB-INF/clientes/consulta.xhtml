@@ -1,0 +1,103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="frmConsultaCliente"
+            styleClass="lit-consulta-clientes">
+
+        <h:panelGroup id="contenidoConsulta" layout="block" styleClass="lit-lista">
+            <h:panelGroup layout="block"
+                          rendered="#{empty consultaClienteUI.clientesActivos}"
+                          styleClass="lit-clientes lit-clientes-panel-vacio">
+                <h:outputText value="#{consultaClienteUI.mensajeEstadoVacio}"
+                              styleClass="lit-clientes-vacio"/>
+            </h:panelGroup>
+
+            <ui:fragment rendered="#{not empty consultaClienteUI.clientesActivos}">
+                <div class="lit-buscador">
+                    <svg class="lit-lupa" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="10.8" cy="10.8" r="6.4"/>
+                        <path d="m15.5 15.5 5 5"/>
+                    </svg>
+
+                    <p:inputText id="busqueda"
+                                 value="#{consultaClienteUI.busqueda}"
+                                 placeholder="Buscar clientes disponibles"
+                                 autocomplete="off"
+                                 styleClass="lit-buscador-input">
+                        <p:ajax event="keyup" delay="250" process="@this" update="listaClientes"/>
+                    </p:inputText>
+                </div>
+
+                <h:panelGroup id="listaClientes" layout="block" styleClass="lit-clientes">
+                    <div class="lit-clientes-scroll">
+                        <ui:repeat value="#{consultaClienteUI.clientesFiltrados}" var="cliente">
+                            <div class="lit-cliente">
+                                <h:outputText value="#{consultaClienteUI.nombreCompleto(cliente)}"
+                                              styleClass="lit-cliente-nombre"/>
+                                <p:commandButton value="VER"
+                                                 action="#{consultaClienteUI.verCliente(cliente)}"
+                                                 process="@this"
+                                                 update=":frmConsultaCliente:dlgClienteContenido"
+                                                 oncomplete="PF('dlgConsultaCliente').show()"
+                                                 styleClass="lit-boton-lista"/>
+                            </div>
+                        </ui:repeat>
+                    </div>
+
+                    <h:panelGroup layout="block"
+                                  rendered="#{not empty consultaClienteUI.busqueda and empty consultaClienteUI.clientesFiltrados}"
+                                  styleClass="lit-clientes-vacio">
+                        <h:outputText value="No se encontraron clientes con ese criterio."/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </ui:fragment>
+        </h:panelGroup>
+
+        <h:outputText id="sinClientes" value=" "
+                      rendered="#{consultaClienteUI.mostrarAvisoInicial}"
+                      style="display:none"/>
+
+        <p:dialog id="dlgCliente" widgetVar="dlgConsultaCliente"
+                  header="Datos del cliente" modal="true" closable="true" resizable="false"
+                  styleClass="lit-dialogo-cliente">
+            <h:panelGroup id="dlgClienteContenido" layout="block">
+                <h:panelGroup layout="block"
+                              rendered="#{not empty consultaClienteUI.clienteConsulta}"
+                              styleClass="lit-detalle-cliente">
+                    <div class="lit-detalle-fila">
+                        <strong>Nombre:</strong>
+                        <h:outputText value="#{consultaClienteUI.nombreCompleto(consultaClienteUI.clienteConsulta)}"/>
+                    </div>
+                    <div class="lit-detalle-fila">
+                        <strong>Correo:</strong>
+                        <h:outputText value="#{consultaClienteUI.clienteConsulta.correo}"/>
+                    </div>
+                    <div class="lit-detalle-fila">
+                        <strong>Teléfono:</strong>
+                        <h:outputText value="#{consultaClienteUI.clienteConsulta.telefono}"/>
+                    </div>
+                    <div class="lit-detalle-fila">
+                        <strong>Estatus:</strong>
+                        <h:outputText value="#{consultaClienteUI.clienteConsulta.estatus}"/>
+                    </div>
+                </h:panelGroup>
+            </h:panelGroup>
+        </p:dialog>
+
+        <p:dialog id="dlgSinClientes" widgetVar="dlgSinClientes"
+                  header="#{consultaClienteUI.tituloAvisoInicial}"
+                  visible="false" modal="true" closable="true" closeOnEscape="true"
+                  resizable="false" styleClass="lit-dialogo-clientes-vacio">
+            <div class="lit-aviso-clientes-vacio">
+                <i class="pi pi-users lit-aviso-clientes-icono" aria-hidden="true"></i>
+                <h:outputText value="#{consultaClienteUI.mensajeAvisoInicial}"/>
+                <p:commandButton type="button" value="Entendido"
+                                 onclick="PF('dlgSinClientes').hide()"
+                                 styleClass="lit-aviso-clientes-boton"/>
+            </div>
+        </p:dialog>
+
+    </h:form>
+</ui:composition>

@@ -863,6 +863,147 @@ body .ui-growl .ui-growl-item-container .ui-growl-icon-close .ui-icon {
     line-height: 1.2;
 }
 
-#pnlModificarProveedor .lit-fila-proveedor .ui-button.lit-boton {
-    margin-top: 0;
+.lit-consulta-clientes .lit-clientes-panel-vacio,
+.lit-eliminar-clientes .lit-clientes-panel-vacio {
+    box-sizing: border-box;
+    display: flex;
+    min-height: 237px;
+    align-items: center;
+    justify-content: center;
+}
+
+.lit-consulta-clientes .lit-clientes-panel-vacio .lit-clientes-vacio,
+.lit-eliminar-clientes .lit-clientes-panel-vacio .lit-clientes-vacio {
+    padding: 0 1rem;
+    color: var(--lit-texto);
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.lit-detalle-cliente {
+    display: flex;
+    min-width: 280px;
+    flex-direction: column;
+    gap: .8rem;
+    padding: .5rem 0;
+}
+
+.lit-detalle-fila {
+    display: flex;
+    gap: .75rem;
+}
+
+.lit-detalle-fila strong {
+    flex: 0 0 82px;
+}
+
+body .ui-dialog.lit-dialogo-cliente .ui-dialog-titlebar {
+    border-color: var(--lit-gris-oscuro);
+    background: var(--lit-gris-oscuro);
+    color: #ececec;
+}
+
+body .ui-dialog.lit-dialogo-cliente .ui-dialog-content {
+    color: var(--lit-texto);
+}
+
+body .ui-dialog.lit-dialogo-clientes-vacio {
+    width: min(90vw, 360px) !important;
+    overflow: hidden;
+    border: 0;
+    border-radius: 12px;
+    box-shadow: 0 5px 16px rgb(0 0 0 / 30%);
+}
+
+body .ui-dialog.lit-dialogo-clientes-vacio .ui-dialog-titlebar {
+    padding: 10px 14px;
+    border: 0;
+    background: var(--lit-gris-oscuro);
+    color: #ececec;
+}
+
+body .ui-dialog.lit-dialogo-clientes-vacio .ui-dialog-content {
+    padding: 1.4rem;
+    background: var(--lit-verde);
+    color: var(--lit-texto);
+    text-align: center;
+}
+
+.lit-aviso-clientes-vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .9rem;
+}
+
+.lit-aviso-clientes-icono {
+    color: var(--lit-gris-oscuro);
+    font-size: 2rem;
+}
+
+body .ui-button.lit-aviso-clientes-boton {
+    min-width: 100px;
+    height: 34px;
+    margin: .2rem 0 0;
+    border: 0;
+    border-radius: 9px;
+    background: var(--lit-gris-oscuro);
+    color: var(--lit-verde);
+    font-family: var(--lit-fuente);
+    font-weight: 700;
+    box-shadow: var(--lit-sombra);
+}
+
+body .ui-button.lit-aviso-clientes-boton:enabled:hover {
+    background: var(--lit-gris-oscuro);
+    color: #c4dbbd;
+    filter: brightness(1.15);
+}
+
+/* Pantalla Eliminar cliente y sus avisos. */
+body .lit-eliminar-clientes .ui-button.lit-boton-eliminar {
+    margin: 0;
+    border: 0;
+    border-radius: 6px;
+    background: #d50043;
+    color: #fff;
+}
+
+body .lit-eliminar-clientes .ui-button.lit-boton-eliminar:enabled:hover {
+    background: #b90039;
+    color: #fff;
+}
+
+.lit-dialogo-eliminar .lit-eliminar-confirmacion,
+.lit-dialogo-eliminacion-exitosa .lit-eliminacion-exitosa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .8rem;
+}
+
+.lit-eliminar-confirmacion i {
+    color: var(--lit-gris-oscuro);
+    font-size: 2rem;
+}
+
+.lit-eliminacion-exitosa i {
+    color: #4b9b42;
+    font-size: 2rem;
+}
+
+body .ui-dialog.lit-dialogo-confirmacion .ui-button.lit-eliminar-confirmar {
+    background: #d50043;
+    color: #fff;
+}
+
+body .ui-dialog.lit-dialogo-confirmacion .ui-button.lit-eliminar-confirmar:enabled:hover {
+    background: #b90039;
+    color: #fff;
+}
+
+@media (max-width: 600px) {
+    .lit-detalle-cliente {
+        min-width: 0;
+    }
 }
